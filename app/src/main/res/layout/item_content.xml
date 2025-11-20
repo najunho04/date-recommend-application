@@ -1,0 +1,161 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_margin="12dp"
+    app:cardElevation="4dp"
+    app:cardUseCompatPadding="true"
+    app:cardCornerRadius="12dp">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:padding="16dp">
+
+        <ImageButton
+            android:id="@+id/btnIsCore"
+            android:layout_width="32dp"
+            android:layout_height="32dp"
+            android:layout_marginTop="44dp"
+            android:layout_marginEnd="8dp"
+            android:background="?attr/selectableItemBackgroundBorderless"
+            android:src="?android:attr/galleryItemBackground"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:tint="#D1D1D1" />
+
+        <!-- 삭제 버튼 -->
+        <ImageButton
+            android:id="@+id/btnDelete"
+            android:layout_width="32dp"
+            android:layout_height="32dp"
+            android:background="?attr/selectableItemBackgroundBorderless"
+            android:src="@android:drawable/ic_menu_close_clear_cancel"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:tint="#FF4444" />
+
+        <!-- 소제목 -->
+        <EditText
+            android:id="@+id/editTitle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:hint="소제목 (예: 성수에서 점심 먹기)"
+            android:textSize="16sp"
+            android:padding="8dp"
+            android:background="@android:color/transparent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toStartOf="@id/btnDelete"
+            app:layout_constraintHorizontal_bias="0" />
+
+        <!-- 시작 시간 -->
+        <TextView
+            android:id="@+id/tvStartTimeLabel"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="시작"
+            android:textColor="#555555"
+            android:textSize="14sp"
+            app:layout_constraintTop_toBottomOf="@id/editTitle"
+            app:layout_constraintStart_toStartOf="parent"
+            android:layout_marginTop="12dp" />
+
+        <EditText
+            android:id="@+id/tvStartTime"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="8dp"
+            android:background="#EFEFEF"
+            android:clickable="true"
+            android:focusable="true"
+            android:padding="6dp"
+            android:hint="00:00"
+            android:textColor="#000000"
+            android:textSize="14sp"
+            app:layout_constraintBottom_toTopOf="@+id/editPlace"
+            app:layout_constraintStart_toEndOf="@id/tvStartTimeLabel"
+            app:layout_constraintTop_toBottomOf="@+id/editTitle" />
+
+        <!-- 종료 시간 -->
+        <TextView
+            android:id="@+id/tvEndTimeLabel"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="32dp"
+            android:text="종료"
+            android:textColor="#555555"
+            android:textSize="14sp"
+            app:layout_constraintBottom_toTopOf="@+id/editPlace"
+            app:layout_constraintStart_toEndOf="@id/tvStartTime"
+            app:layout_constraintTop_toBottomOf="@id/editTitle" />
+
+        <EditText
+            android:id="@+id/tvEndTime"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="8dp"
+            android:background="#EFEFEF"
+            android:clickable="true"
+            android:focusable="true"
+            android:padding="6dp"
+            android:hint="00:00"
+            android:textColor="#000000"
+            android:textSize="14sp"
+            app:layout_constraintBottom_toTopOf="@+id/editPlace"
+            app:layout_constraintStart_toEndOf="@id/tvEndTimeLabel"
+            app:layout_constraintTop_toBottomOf="@id/editTitle" />
+
+        <!-- 장소 -->
+        <EditText
+            android:id="@+id/editPlace"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:hint="장소 입력 (예: 성수 OOO식당)"
+            android:textSize="15sp"
+            android:layout_marginTop="12dp"
+            android:background="@android:color/transparent"
+            app:layout_constraintTop_toBottomOf="@id/tvStartTimeLabel"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent" />
+
+        <!-- 이미지 -->
+        <ImageView
+            android:id="@+id/imgPreview"
+            android:layout_width="match_parent"
+            android:layout_height="180dp"
+            android:scaleType="centerCrop"
+            android:background="#DDDDDD"
+            android:layout_marginTop="12dp"
+            app:layout_constraintTop_toBottomOf="@id/editPlace"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"/>
+
+        <Button
+            android:id="@+id/btnSelectImage"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="이미지 선택"
+            android:layout_marginTop="8dp"
+            app:layout_constraintTop_toBottomOf="@id/imgPreview"
+            app:layout_constraintStart_toStartOf="parent"/>
+
+        <!-- 설명 -->
+        <EditText
+            android:id="@+id/editDescription"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:minHeight="80dp"
+            android:gravity="top"
+            android:hint="부가 설명"
+            android:textSize="15sp"
+            android:background="@android:color/transparent"
+            android:layout_marginTop="12dp"
+            app:layout_constraintTop_toBottomOf="@id/btnSelectImage"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"/>
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+</androidx.cardview.widget.CardView>

@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+    <item
+        android:id="@+id/action_edit"
+        android:title="수정"
+        android:icon="@drawable/common_google_signin_btn_icon_light"
+        app:showAsAction="always" />
+    <item
+        android:id="@+id/action_delete"
+        android:title="삭제"
+        app:showAsAction="always" />
+</menu>

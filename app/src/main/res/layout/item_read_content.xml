@@ -1,0 +1,129 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_margin="12dp"
+    app:cardElevation="4dp"
+    app:cardUseCompatPadding="true"
+    app:cardCornerRadius="12dp">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:padding="16dp">
+
+        <!-- 소제목 -->
+        <TextView
+            android:id="@+id/tvTitle"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:hint="소제목 (예: 성수에서 점심 먹기)"
+            android:textSize="16sp"
+            android:padding="8dp"
+            android:background="@android:color/transparent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0" />
+
+        <!-- 시작 시간 -->
+        <TextView
+            android:id="@+id/tvStartTimeLabel"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="시작"
+            android:textColor="#555555"
+            android:textSize="14sp"
+            app:layout_constraintTop_toBottomOf="@id/tvTitle"
+            app:layout_constraintStart_toStartOf="parent"
+            android:layout_marginTop="12dp" />
+
+        <TextView
+            android:id="@+id/tvStartTime"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="8dp"
+            android:background="#EFEFEF"
+            android:clickable="true"
+            android:focusable="true"
+            android:padding="6dp"
+            android:text="시간 선택"
+            android:textColor="#000000"
+            android:textSize="14sp"
+            app:layout_constraintBottom_toTopOf="@+id/tvPlace"
+            app:layout_constraintStart_toEndOf="@id/tvStartTimeLabel"
+            app:layout_constraintTop_toBottomOf="@+id/tvTitle" />
+
+        <!-- 종료 시간 -->
+        <TextView
+            android:id="@+id/tvEndTimeLabel"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="32dp"
+            android:text="종료"
+            android:textColor="#555555"
+            android:textSize="14sp"
+            app:layout_constraintBottom_toTopOf="@+id/tvPlace"
+            app:layout_constraintStart_toEndOf="@id/tvStartTime"
+            app:layout_constraintTop_toBottomOf="@id/tvTitle" />
+
+        <TextView
+            android:id="@+id/tvEndTime"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="8dp"
+            android:background="#EFEFEF"
+            android:clickable="true"
+            android:focusable="true"
+            android:padding="6dp"
+            android:text="시간 선택"
+            android:textColor="#000000"
+            android:textSize="14sp"
+            app:layout_constraintBottom_toTopOf="@+id/tvPlace"
+            app:layout_constraintStart_toEndOf="@id/tvEndTimeLabel"
+            app:layout_constraintTop_toBottomOf="@id/tvTitle" />
+
+        <!-- 장소 -->
+        <TextView
+            android:id="@+id/tvPlace"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:hint="장소 입력 (예: 성수 OOO식당)"
+            android:textSize="15sp"
+            android:layout_marginTop="12dp"
+            android:background="@android:color/transparent"
+            app:layout_constraintTop_toBottomOf="@id/tvStartTimeLabel"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent" />
+
+        <!-- 이미지 -->
+        <ImageView
+            android:id="@+id/imgPreview"
+            android:layout_width="match_parent"
+            android:layout_height="180dp"
+            android:scaleType="centerCrop"
+            android:background="#DDDDDD"
+            android:layout_marginTop="12dp"
+            app:layout_constraintTop_toBottomOf="@id/tvPlace"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"/>
+
+        <!-- 설명 -->
+        <TextView
+            android:id="@+id/tvDescription"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:minHeight="80dp"
+            android:gravity="top"
+            android:hint="부가 설명"
+            android:textSize="15sp"
+            android:background="@android:color/transparent"
+            android:layout_marginTop="12dp"
+            app:layout_constraintTop_toBottomOf="@id/imgPreview"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"/>
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+</androidx.cardview.widget.CardView>

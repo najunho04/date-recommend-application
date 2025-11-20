@@ -1,0 +1,136 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_margin="8dp"
+    app:cardCornerRadius="12dp"
+    app:cardElevation="3dp"
+    android:foreground="?attr/selectableItemBackground"
+    android:clickable="true"
+    android:focusable="true">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:layout_margin="15dp"
+        android:padding="12dp">
+
+        <!-- 🔹 썸네일 (content 대표 이미지 or 기본 이미지) -->
+        <ImageView
+            android:id="@+id/post_thumbnail"
+            android:layout_width="match_parent"
+            android:layout_height="180dp"
+            android:scaleType="centerCrop"
+            android:adjustViewBounds="true"
+            android:src="@drawable/ic_launcher_foreground" />
+
+        <!-- 🔹 제목 -->
+        <TextView
+            android:id="@+id/post_title"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:text="Post Title"
+            android:textSize="18sp"
+            android:textStyle="bold"
+            android:textColor="@android:color/black" />
+
+        <!-- 🔹 내용 (일부 미리보기) -->
+        <TextView
+            android:id="@+id/post_content_preview"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="4dp"
+            android:text="This is a preview of the post content..."
+            android:textSize="14sp"
+            android:textColor="#555555"
+            android:maxLines="3"
+            android:ellipsize="end" />
+
+        <!-- 🔹 작성자 + 작성일 -->
+        <TextView
+            android:id="@+id/post_meta"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="6dp"
+            android:text="작성자 · 2025.11.08"
+            android:textSize="12sp"
+            android:textColor="#888888" />
+
+        <!-- 🔹 좋아요/댓글 카운트 -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:orientation="horizontal"
+            android:gravity="start">
+
+            <Button
+                android:id="@+id/post_likes_btn"
+                android:layout_width="48dp"
+                android:layout_height="wrap_content"
+                android:text="❤️"
+                android:textSize="13sp"
+                android:textColor="#666666"
+                android:backgroundTint="@color/white"
+                android:layout_marginEnd="4dp"
+                android:clickable="true"
+                android:focusable="true"/>
+            <TextView
+                android:id="@+id/post_likes"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="1"
+                android:textSize="13sp"
+                android:textColor="#666666"
+                android:layout_marginEnd="8dp"/>
+
+
+            <Button
+                android:id="@+id/post_retweet_btn"
+                android:layout_width="48dp"
+                android:layout_height="wrap_content"
+                android:text="r"
+                android:textSize="13sp"
+                android:backgroundTint="@color/white"
+                android:textColor="#666666"
+                android:layout_marginEnd="4dp"
+                android:clickable="true"
+                android:focusable="true"/>
+
+            <TextView
+                android:id="@+id/post_retweet"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="1"
+                android:textSize="13sp"
+                android:textColor="#666666"
+                android:layout_marginEnd="8dp"/>
+
+            <Button
+                android:id="@+id/post_comments_btn"
+                android:layout_width="48dp"
+                android:layout_height="wrap_content"
+                android:text="💬"
+                android:textSize="13sp"
+                android:backgroundTint="@color/white"
+                android:textColor="#666666"
+                android:layout_marginEnd="4dp"
+                android:clickable="true"
+                android:focusable="true"/>
+
+            <TextView
+                android:id="@+id/post_comments"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="1"
+                android:textSize="13sp"
+                android:textColor="#666666"
+                android:layout_marginEnd="8dp"/>
+
+        </LinearLayout>
+
+    </LinearLayout>
+</androidx.cardview.widget.CardView>

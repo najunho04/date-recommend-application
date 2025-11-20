@@ -1,0 +1,158 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.coordinatorlayout.widget.CoordinatorLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/open_post_root"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <!-- 상단 AppBar -->
+    <com.google.android.material.appbar.MaterialToolbar
+        android:id="@+id/topAppBar"
+        android:layout_width="match_parent"
+        android:layout_height="?attr/actionBarSize"
+        android:background="?attr/colorSurface"
+        app:navigationIcon="@drawable/ic_launcher_foreground"
+        app:title="게시글"
+        app:titleCentered="true"
+        app:menu="@menu/menu_post_actions" />
+
+    <androidx.core.widget.NestedScrollView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:layout_behavior="@string/appbar_scrolling_view_behavior"
+        android:padding="16dp"
+        android:clipToPadding="false"
+        android:layout_marginTop="?attr/actionBarSize"
+        android:dividerPadding="8dp"
+        android:fillViewport="true">
+
+        <LinearLayout
+            android:orientation="vertical"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:dividerPadding="8dp">
+
+            <!-- 작성자 정보 -->
+            <LinearLayout
+                android:orientation="horizontal"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center_vertical"
+                android:paddingBottom="12dp">
+
+                <ImageView
+                    android:id="@+id/authorImage"
+                    android:layout_width="40dp"
+                    android:layout_height="40dp"
+                    android:src="@drawable/ic_launcher_foreground"
+                    android:scaleType="centerCrop"
+                    android:contentDescription="작성자 프로필" />
+
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:layout_marginStart="12dp">
+
+                    <TextView
+                        android:id="@+id/authorName"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="나준호"
+                        android:textStyle="bold"
+                        android:textSize="16sp" />
+
+                    <TextView
+                        android:id="@+id/postDate"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="2025.11.10 14:30"
+                        android:textSize="12sp" />
+                </LinearLayout>
+            </LinearLayout>
+
+            <TextView
+                android:id="@+id/tvOriginalPost"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="original post: null"
+                android:textSize="18sp"
+                android:clickable="true"
+                android:focusable="true"
+                android:layout_marginBottom="8dp"
+                />
+
+            <!-- 제목 -->
+            <TextView
+                android:id="@+id/postTitle"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="데이트 코스 추천"
+                android:textAppearance="@style/TextAppearance.Material3.HeadlineSmall"
+                android:textStyle="bold"
+                android:paddingBottom="8dp" />
+
+            <!-- 🔹 Content 리스트 표시용 RecyclerView 추가 -->
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/contentRecyclerView"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:nestedScrollingEnabled="false"
+                android:clipToPadding="false"
+                android:paddingBottom="16dp" />
+
+        </LinearLayout>
+    </androidx.core.widget.NestedScrollView>
+
+    <!-- 🔹 댓글 RecyclerView -->
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/commentRecyclerView"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="240dp"
+        android:layout_marginBottom="72dp"
+        android:layout_gravity="bottom"
+        android:clipToPadding="false"
+        android:nestedScrollingEnabled="false"
+        android:paddingHorizontal="16dp"
+        android:scrollbars="none" />
+
+    <!-- 🔹 하단 댓글 입력창 -->
+    <LinearLayout
+        android:id="@+id/commentInputLayout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="bottom"
+        android:padding="12dp"
+        android:background="?attr/colorSurface"
+        android:elevation="4dp"
+        android:orientation="horizontal"
+        android:gravity="center_vertical">
+
+        <com.google.android.material.textfield.TextInputLayout
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:hint="댓글을 입력하세요">
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/commentEditText"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:imeOptions="actionSend"
+                android:inputType="textCapSentences|textMultiLine"
+                android:maxLines="3"
+                android:scrollbars="vertical" />
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <Button
+            android:id="@+id/sendCommentBtn"
+            android:layout_width="60dp"
+            android:layout_height="60dp"
+            android:backgroundTint="#FFFDFD"
+            android:text="저장"
+            android:textColor="#000000" />
+    </LinearLayout>
+
+</androidx.coordinatorlayout.widget.CoordinatorLayout>
