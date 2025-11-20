@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <!-- File: app/src/main/res/values/themes.xml --><style name="Theme.DateCourseRecommendApplication" parent="Theme.MaterialComponents.DayNight.NoActionBar">
+    <!--
+        By inheriting from a MaterialComponents theme, you get all the
+        benefits of Material Design while also satisfying the AppCompat requirement.
+        Using .NoActionBar is common because it gives you full control
+        to add your own custom Toolbar in the layout.
+    -->
+
+    <!-- Customize your theme's colors here -->
+    <item name="colorPrimary">@color/purple_500</item>
+    <item name="colorPrimaryVariant">@color/purple_700</item>
+    <item name="colorOnPrimary">@color/white</item>
+    <!-- Secondary brand color. -->
+    <item name="colorSecondary">@color/teal_200</item>
+    <item name="colorSecondaryVariant">@color/teal_700</item>
+    <item name="colorOnSecondary">@color/black</item>
+    <!-- Status bar color. -->
+    <item name="android:statusBarColor">?attr/colorPrimaryVariant</item>
+    <!-- Customize your theme here. -->
+</style>
+</resources>

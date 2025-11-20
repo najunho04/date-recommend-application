@@ -1,0 +1,8 @@
+#.gitignore
+# Local configuration file (sdk path, etc)
+local.properties
+
+# Gradle files : "build/" 경로 아래를 gitignore로 체크인을 막는다.
+.gradle/
+build/
+#출처: https://devvkkid.tistory.com/201 [개발자입니까?:티스토리]
