@@ -73,7 +73,18 @@ public class EditPostActivity extends AppCompatActivity {
 
             @Override
             public void onIsCoreClick(int position) {
+<<<<<<< HEAD
 
+=======
+                Toast.makeText(EditPostActivity.this, "핵심 데이트 코스로 선택했습니다.", Toast.LENGTH_SHORT).show();
+            }
+
+            @Override
+            public void onSelectLocation(int position) {
+                Log.d("ContentAdapter", "onSelectLocation success");
+                Intent intent = new Intent(EditPostActivity.this, SearchLocationActivity.class);
+                startActivity(intent);
+>>>>>>> feature/location
             }
         });
         recyclerView.setAdapter(contentAdapter);

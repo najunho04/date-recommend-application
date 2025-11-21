@@ -10,6 +10,10 @@ android {
     namespace = "com.example.datecourserecommendapplication"
     compileSdk = 36
 
+    buildFeatures {
+        compose = true
+    }
+
     defaultConfig {
         applicationId = "com.example.datecourserecommendapplication"
         minSdk = 24
@@ -35,9 +39,6 @@ android {
     }
     kotlinOptions {
         jvmTarget = "11"
-    }
-    buildFeatures {
-        compose = true
     }
 }
 
@@ -70,5 +71,14 @@ dependencies {
     implementation ("com.google.android.gms:play-services-auth") //firebase for json file
     implementation("com.google.firebase:firebase-analytics") //firebase
     implementation("com.google.firebase:firebase-firestore:25.0.0") //firestore
+
+    implementation("com.squareup.retrofit2:retrofit:3.0.0")
+    implementation("com.squareup.retrofit2:converter-gson:3.0.0")
+    implementation("com.squareup.okhttp3:okhttp:4.12.0")
+    implementation("com.squareup.okhttp3:logging-interceptor:4.12.0")
+    // optional: lifecycle + viewmodel
+    implementation("androidx.lifecycle:lifecycle-viewmodel-ktx:2.10.0")
+    implementation("androidx.lifecycle:lifecycle-runtime-ktx:2.6.1")
+    //mapView - kakao
 
 }

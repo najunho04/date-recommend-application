@@ -71,7 +71,7 @@ public class ReadContentAdapter extends ListAdapter<Content, ReadContentAdapter.
             tvTitle.setText(item.getTitle());
             tvStartTime.setText(item.getStartTimeString());
             tvEndTime.setText(item.getEndTimeString());
-            tvPlace.setText(item.getPlace()); //추후 수정 예정
+            tvPlace.setText(item.getLocation().getName()); //추후 수정 예정
             tvDescription.setText(item.getDescription());
         }
     }

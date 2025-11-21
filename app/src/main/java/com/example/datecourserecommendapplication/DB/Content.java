@@ -15,7 +15,11 @@ public class Content {
     private String endTimeString;    // 종료 시간 문자열
 
     // 장소 정보 구조
+<<<<<<< HEAD
     private String place; //추후 위치정보를 위한 타입으로 변경 예쩡
+=======
+    private Location location; //위치정보
+>>>>>>> feature/location
 
     private String imageUrl;        // 이미지 URI
     private String description;     // 부가 설명
@@ -40,6 +44,25 @@ public class Content {
         this.description = description;
     }
 
+<<<<<<< HEAD
+=======
+    public Content(Content other) {
+        this.contentId = other.contentId;
+        this.title = other.title;
+        this.startTime = other.startTime;
+        this.endTime = other.endTime;
+        this.location = other.location;
+        this.imageUrl = other.imageUrl;
+        this.description = other.description;
+        this.order = other.order;
+        this.originalPostId = other.originalPostId;
+        this.originalContentId = other.originalContentId;
+        this.isCore = other.isCore;
+        this.startTimeString = other.startTimeString;
+        this.endTimeString = other.endTimeString;
+    }
+
+>>>>>>> feature/location
     // ---------- Getter & Setter ----------
     public String getContentId() { return contentId; }
     public void setContentId(String contentId) { this.contentId = contentId; }
@@ -53,8 +76,13 @@ public class Content {
     public Timestamp getEndTime() { return endTime; }
     public void setEndTime(Timestamp endTime) { this.endTime = endTime; }
 
+<<<<<<< HEAD
     public String getPlace() { return place; }
     public void setPlace(String place) { this.place = place; }
+=======
+    public Location getLocation() { return location; }
+    public void setLocation(Location location) { this.location = location; }
+>>>>>>> feature/location
 
     public String getImageUrl() { return imageUrl; }
     public void setImageUrl(String imageUrl) { this.imageUrl = imageUrl; }
@@ -90,7 +118,11 @@ public class Content {
         putIfNotNull(map, "startTimeString", startTimeString);
         putIfNotNull(map, "endTime", endTime);
         putIfNotNull(map, "endTimeString", endTimeString);
+<<<<<<< HEAD
         putIfNotNull(map, "place", place);
+=======
+        putIfNotNull(map, "location", location);
+>>>>>>> feature/location
         putIfNotNull(map, "imageUrl", imageUrl); //DB x
         putIfNotNull(map, "description", description);
         putIfNotNull(map, "order", order);

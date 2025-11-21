@@ -16,6 +16,8 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.DateCourseRecommendApplication">
 
+
+
         <!-- 로그인 액티비티: 앱 시작점 -->
         <activity
             android:name=".Activity.SplashActivity"
@@ -35,6 +37,7 @@
         <activity android:name=".Activity.UserCreateActivity"/>
         <activity android:name=".Activity.UserProfileEditActivity"/>
         <activity android:name=".Activity.EditPostActivity"/>
+        <activity android:name=".Activity.SearchLocationActivity"/>
 
         <activity
             android:name=".Activity.MainActivity"

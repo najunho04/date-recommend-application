@@ -18,7 +18,6 @@ interface GoogleSignOutCallback{
 }
 
 object GoogleSignOutHelper {
-
     @JvmStatic
     fun signOutWithGoogleAsync(activity: Activity, callback: GoogleSignOutCallback){
         CoroutineScope(Dispatchers.Main).launch {

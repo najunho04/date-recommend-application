@@ -69,7 +69,7 @@ object GoogleSignInHelper {
                     null
                 }
             }else{
-                Log.e("GoogleSignInHelper2", "Unexpected credential type: ${credential?.javaClass}")
+                Log.e("GoogleSignInHelper2", "Unexpected credential type: ${credential.javaClass}")
                 null
             }
         }catch (e: Exception) {
