@@ -12,6 +12,7 @@ import androidx.recyclerview.widget.DiffUtil;
 import androidx.recyclerview.widget.ListAdapter;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.bumptech.glide.Glide;
 import com.example.datecourserecommendapplication.DB.Content;
 import com.example.datecourserecommendapplication.R;
 
@@ -73,6 +74,15 @@ public class ReadContentAdapter extends ListAdapter<Content, ReadContentAdapter.
             tvEndTime.setText(item.getEndTimeString());
             tvPlace.setText(item.getLocation().getName()); //추후 수정 예정
             tvDescription.setText(item.getDescription());
+
+            //img setup
+            if (item.getImageUrl() != null) {
+                Glide.with(itemView.getContext())
+                        .load(item.getImageUrl())
+                        .into(imgPreview);
+            } else {
+                imgPreview.setImageDrawable(null);
+            }
         }
     }
 }

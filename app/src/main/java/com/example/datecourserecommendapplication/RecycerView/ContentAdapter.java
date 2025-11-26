@@ -19,6 +19,7 @@ import androidx.recyclerview.widget.DiffUtil;
 import androidx.recyclerview.widget.ListAdapter;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.bumptech.glide.Glide;
 import com.example.datecourserecommendapplication.DB.Comment;
 import com.example.datecourserecommendapplication.DB.Content;
 import com.example.datecourserecommendapplication.DB.Location;
@@ -26,6 +27,7 @@ import com.example.datecourserecommendapplication.R;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 public class ContentAdapter extends ListAdapter<Content, ContentAdapter.ContentViewHolder> {
     private boolean isEditableMode; // 화면에서 수정 가능 여부 -> True : WritePost,updatePost / False : retweetPost
@@ -33,7 +35,7 @@ public class ContentAdapter extends ListAdapter<Content, ContentAdapter.ContentV
     //리스너 구현 -> 리사이클러뷰 아이템 클릭 리스너
     public interface OnContentActionListener {
         void onDeleteClick(int position);
-        void onSelectImageClick();
+        void onSelectImageClick(int position);
         void onIsCoreClick(int position);
         void onSelectLocation(int position);
     }
@@ -53,29 +55,48 @@ public class ContentAdapter extends ListAdapter<Content, ContentAdapter.ContentV
         }
         @Override
         public boolean areContentsTheSame(@NonNull Content oldItem, @NonNull Content newItem) {
+            //title 필드 비교
             String oldTitle = oldItem.getTitle() != null ? oldItem.getTitle() : "";
             String newTitle = newItem.getTitle() != null ? newItem.getTitle() : "";
+
+            //Description 필드 비교
             String oldDesc = oldItem.getDescription() != null ? oldItem.getDescription() : "";
             String newDesc = newItem.getDescription() != null ? newItem.getDescription() : "";
+
+            //Uri 필드 비교
+            String oldUri = oldItem.getImageUrl();
+            String newUri = newItem.getImageUrl();
+
+            //Location 비교를 위한 객체 생성
             Location oldLoc = oldItem.getLocation() != null ? oldItem.getLocation() : new Location("", "", 0, 0);
-            Location newLoc = newItem.getLocation() != null ? newItem.getLocation() : new Location("new", "", 0, 0);
-            //Location Class타입은 equal() 불가함으로 Location 필드들을 비교 -> 추후 equal() override해서 사용
+            Location newLoc = newItem.getLocation() != null ? newItem.getLocation() : new Location("", "", 0, 0);
 
-            Log.d("areContentsTheSame", "oldLocation: " + oldLoc.toString());
-            Log.d("areContentsTheSame", "newLocation: " + newLoc.toString());
-
+            //Location 필드 비교 (equal() override 안 됐을 때)
             String oldName = oldLoc.getName() != null ? oldLoc.getName() : "";
             String newName = newLoc.getName() != null ? newLoc.getName() : "";
 
             String oldAddr = oldLoc.getAddress() != null ? oldLoc.getAddress() : "";
             String newAddr = newLoc.getAddress() != null ? newLoc.getAddress() : "";
-            boolean isLocationSame = oldName.equals(newName) &&
-                    oldAddr.equals(newAddr);
-            Log.d("areContentsTheSame", "titlesTheSame: " + oldTitle.equals(newTitle));
-            Log.d("areContentsTheSame", "descriptionsTheSame: " + oldDesc.equals(newDesc));
-            Log.d("areContentsTheSame", "locationsTheSame: " + isLocationSame);
 
-            return oldTitle.equals(newTitle) && oldDesc.equals(newDesc) && isLocationSame;
+            boolean isLocationSame = oldName.equals(newName) && oldAddr.equals(newAddr);
+
+            // 로그 유지
+            Log.d("areContentsTheSame", "oldTitle: " + oldTitle + ", newTitle: " + newTitle);
+            Log.d("areContentsTheSame", "oldDesc: " + oldDesc + ", newDesc: " + newDesc);
+            Log.d("areContentsTheSame", "oldLocation: " + oldLoc.toString());
+            Log.d("areContentsTheSame", "newLocation: " + newLoc.toString());
+            Log.d("areContentsTheSame", "oldUri: " + oldUri);
+            Log.d("areContentsTheSame", "newUri: " + newUri);
+            Log.d("areContentsTheSame", "titlesTheSame: " + Objects.equals(oldTitle, newTitle));
+            Log.d("areContentsTheSame", "descriptionsTheSame: " + Objects.equals(oldDesc, newDesc));
+            Log.d("areContentsTheSame", "locationsTheSame: " + isLocationSame);
+            Log.d("areContentsTheSame", "urisTheSame: " + Objects.equals(oldUri, newUri));
+
+            // 최종 비교 / 참고: Qbject.equals 사용하면 null 체크 필요 없음
+            return Objects.equals(oldTitle, newTitle)
+                    && Objects.equals(oldDesc, newDesc)
+                    && isLocationSame
+                    && Objects.equals(oldUri, newUri);
         }
     };
     public ContentAdapter(boolean isEditableMode, OnContentActionListener listener) {
@@ -168,7 +189,15 @@ public class ContentAdapter extends ListAdapter<Content, ContentAdapter.ContentV
             });
 
             // 이미지 로딩 로직도 추후 글라이드로 추가 예정
-            // Glide.with(holder.itemView).load(item.getImageUrl()).into(holder.imgPreview);
+            //Glide : Uri -> String이여도 변환후 자동 반영 -> 개섹스
+            if (item.getImageUrl() != null) {
+                Glide.with(itemView.getContext())
+                        .load(item.getImageUrl())
+                        .into(imgPreview);
+            } else {
+                imgPreview.setImageDrawable(null);
+            }
+
 
             // TextWatcher를 등록하여 입력 시 Content 객체에 바로 반영
             editTitle.addTextChangedListener(new SimpleTextWatcher() {
@@ -196,7 +225,7 @@ public class ContentAdapter extends ListAdapter<Content, ContentAdapter.ContentV
                 if (listener != null) listener.onDeleteClick(getLayoutPosition()); //item view 삭제
             });
             btnSelectImage.setOnClickListener(v -> {
-                if (listener != null) listener.onSelectImageClick(); //이미지 선택
+                if (listener != null) listener.onSelectImageClick(getLayoutPosition()); //이미지 선택
             });
             btnIsCore.setOnClickListener(v -> {
                 boolean newValue = !item.getIsCore();
@@ -225,6 +254,13 @@ public class ContentAdapter extends ListAdapter<Content, ContentAdapter.ContentV
             editDescription.setText(item.getDescription());
             editStartTime.setText(item.getStartTimeString());
             editEndTime.setText(item.getEndTimeString());
+            if (item.getImageUrl() != null) {
+                Glide.with(itemView.getContext())
+                        .load(item.getImageUrl())
+                        .into(imgPreview);
+            } else {
+                imgPreview.setImageDrawable(null);
+            }
 
             // 2) 모든 EditText 수정 불가
             editTitle.setEnabled(false);

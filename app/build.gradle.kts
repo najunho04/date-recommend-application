@@ -79,6 +79,9 @@ dependencies {
     // optional: lifecycle + viewmodel
     implementation("androidx.lifecycle:lifecycle-viewmodel-ktx:2.10.0")
     implementation("androidx.lifecycle:lifecycle-runtime-ktx:2.6.1")
-    //mapView - kakao
+
+    //glide 라이브러리
+    implementation ("com.github.bumptech.glide:glide:4.15.1")
+    annotationProcessor ("com.github.bumptech.glide:compiler:4.15.1")
 
 }

@@ -23,8 +23,7 @@ public class Post implements Serializable {
     private String parentPostId; //자신이 부모 post인지 자식 post인지 확인하는 용도 부모 post일때: null / 자식: 부모 postId
     private boolean isRetweeted; //리트윗 확인 목적
 
-    // 원본 정보 스냅샷(옵션)
-    private Map<String, Object> parentSnapshotInfo;
+    private String thumbnail; //Uri String
 
 
     // 🔹 Firestore 직렬화용 기본 생성자 (필수)
@@ -88,6 +87,10 @@ public class Post implements Serializable {
         this.isRetweeted = retweeted;
     }
 
+    public String getThumbnail() {return thumbnail;}
+    public void setThumbnail(String thumbnail) {this.thumbnail = thumbnail;}
+
+
 
     // 🔹 Firestore에 저장할 때 Map 변환용
     public Map<String, Object> toMap() {
@@ -105,17 +108,7 @@ public class Post implements Serializable {
         map.put("likesBy", likesBy);
         map.put("isRetweeted", isRetweeted);
         map.put("parentPostId", parentPostId);
+        map.put("thumbnail", thumbnail);
         return map;
-    }
-
-    // parentSnapshotInfo 생성 편의 메서드
-    public static Map<String, Object> createSnapshotInfo(String authorName,
-                                                         String firstCourseTitle,
-                                                         String thumbnailUrl) {
-        Map<String, Object> info = new HashMap<>();
-        info.put("authorName", authorName);
-        info.put("firstCourseTitle", firstCourseTitle);
-        info.put("thumbnailUrl", thumbnailUrl);
-        return info;
     }
 }
