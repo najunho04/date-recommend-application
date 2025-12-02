@@ -16,7 +16,7 @@ public class Location {
     private Double longitude;
     @SerializedName("id")
     private String placeId; // optional
-    private int itemIndex;
+    private int itemIndex = 0;
 
     // Firebase에서 객체 직렬화할 때 필요
     public Location() {}

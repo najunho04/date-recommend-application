@@ -4,6 +4,7 @@ import android.util.Log;
 
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.Query;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -22,6 +23,7 @@ public class ContentRepo {
     public void getContentByPostId(String postId, OnGetContentsListener listener){
         db.collection("Posts").document(postId)
                 .collection("Content")
+                .orderBy("order", Query.Direction.ASCENDING)
                 .get()
                 .addOnSuccessListener(querySnapshot -> {
                     List<Content> contents = new ArrayList<>();

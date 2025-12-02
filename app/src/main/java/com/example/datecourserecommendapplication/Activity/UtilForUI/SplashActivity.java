@@ -1,16 +1,15 @@
-package com.example.datecourserecommendapplication.Activity;
+package com.example.datecourserecommendapplication.Activity.UtilForUI;
 
 import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.os.Bundle;
-import android.util.Log;
 import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 
-import com.example.datecourserecommendapplication.DB.UserRepo;
+import com.example.datecourserecommendapplication.Activity.LoginActivity;
+import com.example.datecourserecommendapplication.Activity.MainActivity;
 import com.example.datecourserecommendapplication.R;
-import com.example.datecourserecommendapplication.Util.ApplicationUtil;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 

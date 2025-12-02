@@ -1,4 +1,4 @@
-package com.example.datecourserecommendapplication.Activity;
+package com.example.datecourserecommendapplication.Activity.User;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -12,6 +12,10 @@ import android.widget.Toast;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.example.datecourserecommendapplication.Activity.LoginActivity;
+import com.example.datecourserecommendapplication.Activity.MainActivity;
+import com.example.datecourserecommendapplication.Activity.UtilForUI.ViewMyLikesActivity;
+import com.example.datecourserecommendapplication.Activity.UtilForUI.ViewMyPostsActivity;
 import com.example.datecourserecommendapplication.DB.UserRepo;
 import com.example.datecourserecommendapplication.R;
 import com.example.datecourserecommendapplication.Util.ApplicationUtil;
@@ -19,7 +23,6 @@ import com.example.datecourserecommendapplication.Util.GoogleSignInCallback;
 import com.example.datecourserecommendapplication.Util.GoogleSignInHelper;
 import com.example.datecourserecommendapplication.Util.GoogleSignOutCallback;
 import com.example.datecourserecommendapplication.Util.GoogleSignOutHelper;
-import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 import com.google.firebase.auth.AuthCredential;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
@@ -65,10 +68,23 @@ public class UserSetUpActivity extends AppCompatActivity {
             showChangeNicknameDialog();
         });
 
+        //정보 수정
         btnMyInfo.setOnClickListener(v->{
             Intent intent = new Intent(this, UserProfileEditActivity.class);
             startActivity(intent);
             finish();
+        });
+
+        //자기 게시물 보기
+        btnMyPosts.setOnClickListener(v->{
+            Intent intent = new Intent(this, ViewMyPostsActivity.class);
+            startActivity(intent);
+        });
+
+        //좋아요 누른 게시물 보기
+        btnMyLikes.setOnClickListener(v->{
+            Intent intent = new Intent(this, ViewMyLikesActivity.class);
+            startActivity(intent);
         });
 
         //회원 탈퇴

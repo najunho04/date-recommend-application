@@ -1,4 +1,4 @@
-package com.example.datecourserecommendapplication.Activity;
+package com.example.datecourserecommendapplication.Activity.ForPost;
 
 import android.app.Activity;
 import android.content.Intent;
@@ -7,32 +7,43 @@ import android.os.Bundle;
 import android.util.Log;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageButton;
 import android.widget.Toast;
 
 import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.lifecycle.ViewModelProvider;
+import androidx.recyclerview.widget.ItemTouchHelper;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.example.datecourserecommendapplication.Activity.MainActivity;
+import com.example.datecourserecommendapplication.Activity.UtilForUI.SearchLocationActivity;
 import com.example.datecourserecommendapplication.DB.Content;
 import com.example.datecourserecommendapplication.DB.Location;
 import com.example.datecourserecommendapplication.DB.Post;
 import com.example.datecourserecommendapplication.R;
 import com.example.datecourserecommendapplication.RecycerView.ContentAdapter;
+import com.example.datecourserecommendapplication.Util.ContentItemTouchHelperCallback;
 import com.example.datecourserecommendapplication.Util.TimeCheck;
 import com.example.datecourserecommendapplication.ViewModel.MainViewModel;
 import com.google.firebase.Timestamp;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.StorageReference;
+import com.google.firebase.storage.StorageException;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.UUID;
 
 public class WritePostActivity extends AppCompatActivity {
     private ActivityResultLauncher<Intent> pickImageLauncher;
+    private FirebaseStorage storage;
     private Button btnSave, btnAddCourse;
+    private ImageButton btnBack;
     private EditText editTitle;
     private MainViewModel viewModel;
     private FirebaseAuth mAuth;
@@ -48,6 +59,8 @@ public class WritePostActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_write_post);
 
+        storage = FirebaseStorage.getInstance();
+
         mAuth = FirebaseAuth.getInstance();
         viewModel = new ViewModelProvider(this).get(MainViewModel.class);
         user = mAuth.getCurrentUser();
@@ -56,6 +69,7 @@ public class WritePostActivity extends AppCompatActivity {
 
         btnSave = findViewById(R.id.btnSave);
         btnAddCourse = findViewById(R.id.btnAddCourse);
+        btnBack = findViewById(R.id.btn_back);
         editTitle = findViewById(R.id.editTitle);
 
         //get img intent data
@@ -91,11 +105,26 @@ public class WritePostActivity extends AppCompatActivity {
             public void onSelectLocation(int position) {
                 Log.d("ContentAdapter", "onSelectLocation success");
                 Intent intent = new Intent(WritePostActivity.this, SearchLocationActivity.class);
+                selectedItemIndex = position;
                 intent.putExtra("itemIndex", position);
                 locationSearchLauncher.launch(intent);
             }
         });
         recyclerView.setAdapter(adapter);
+        //드래그 로직 setup
+        //ItemTouchHelper : 드래그 인식만 함 -> callback으로 전달 -> adapter에 리스너 통해서 로직 구현
+        //결국 우린 ItemTouchHelper를 쓰기 위해서 callback을 만든거고 (ContentItemTouchHelperCallback), callback과 onMove 리스너를
+        //연결해서 어댑터에서 로직을 구현함.
+        ItemTouchHelper.Callback callback = new ContentItemTouchHelperCallback(adapter);
+        ItemTouchHelper touchHelper = new ItemTouchHelper(callback);
+        touchHelper.attachToRecyclerView(recyclerView);
+
+        //뒤로가기
+        btnBack.setOnClickListener(v->{
+            Intent intent = new Intent(this, MainActivity.class);
+            startActivity(intent);
+            finish();
+        });
 
         //Save button logic
         btnSave.setOnClickListener(v -> {
@@ -107,6 +136,10 @@ public class WritePostActivity extends AppCompatActivity {
 
             Post post = new Post(title, user.getUid(), Timestamp.now());
             List<Content> contentList = new ArrayList<>(adapter.getCurrentList());
+            for (int i = 0; i < contentList.size(); i++) {
+                contentList.get(i).setOrder(i);
+            }
+            Log.d("after Drag", contentList.get(0).toString());
 
             //preView 설정
             post.setPreviewText(contentList.get(0).getDescription());
@@ -172,20 +205,19 @@ public class WritePostActivity extends AppCompatActivity {
                             String placeId = data.getStringExtra("placeId");
                             int itemIndex = data.getIntExtra("itemIndex", -1);
 
-                            setLocationInfo(name, address, lat, lng, placeId, itemIndex);
+                            setLocationInfo(name, address, lat, lng, placeId);
                         }
                     }
                 });
     }
 
     //location 정보 UI 반영
-    private void setLocationInfo(String name, String address, double lat, double lng, String placeId, int itemIndex) {
+    private void setLocationInfo(String name, String address, double lat, double lng, String placeId) {
         selectedPlace.setName(name);
         selectedPlace.setAddress(address);
         selectedPlace.setLatitude(lat);
         selectedPlace.setLongitude(lng);
         selectedPlace.setPlaceId(placeId);
-        selectedPlace.setItemIndex(itemIndex);
         Log.d("setLocationInfo", selectedPlace.toString());
         // UI에 표시 -> ContentList에 Location 추가하고 UI반영
         //-> DiffUtil에서 List뿐 아니라 인덱스 객체들도 새로운 객체여야 함. -> 다시 말해서 아예 새로운 객체, 인덱스 객체이여야 함
@@ -193,7 +225,8 @@ public class WritePostActivity extends AppCompatActivity {
         for (Content c : adapter.getCurrentList()) {
             newList.add(new Content(c)); // 깊은 복사
         }
-        newList.get(itemIndex).setLocation(selectedPlace);
+        Location newLocation = new Location(selectedPlace);//전역변수를 list에 추가 시 같은 객체 참조 이슈 발생.
+        newList.get(selectedItemIndex).setLocation(newLocation);
         adapter.submitList(newList);
     }
 
@@ -205,19 +238,56 @@ public class WritePostActivity extends AppCompatActivity {
                     if (result.getResultCode() == Activity.RESULT_OK && result.getData() != null) {
                         Uri uri = result.getData().getData();
                         if (uri != null && selectedItemIndex != -1) {
-                            // 권한 영구 보존
-                            final int takeFlags = result.getData().getFlags()
-                                    & (Intent.FLAG_GRANT_READ_URI_PERMISSION
-                                    | Intent.FLAG_GRANT_WRITE_URI_PERMISSION);
+                            //로컬 환경에서 uri 영구 보관
                             getContentResolver().takePersistableUriPermission(uri, Intent.FLAG_GRANT_READ_URI_PERMISSION);
 
-                            // RecyclerView의 리스트(uri) 업데이트
-                            List<Content> newList = new ArrayList<>();
-                            for (Content c : adapter.getCurrentList()) {
-                                newList.add(new Content(c)); // 깊은 복사
-                            }
-                            newList.get(selectedItemIndex).setImageUrl(uri.toString());
-                            adapter.submitList(newList);
+                            //storage 통해서 uri 전송 및 url 생성.
+                            String filename = UUID.randomUUID().toString() + ".jpg";
+                            //StorageReference
+                            StorageReference storageRef = storage.getReference()
+                                    .child("postImages/" + filename);
+
+                            storageRef.putFile(uri)
+                                    .addOnSuccessListener(task ->{
+                                        Log.d("WritePostActivity", "uri 업로드 성공");
+                                        storageRef.getDownloadUrl()
+                                                .addOnSuccessListener(downloadUri  ->{
+                                                    Log.d("WritePostActivity", "uri 불러오기 성공");
+
+                                                    // RecyclerView의 리스트(uri) 업데이트
+                                                    List<Content> newList = new ArrayList<>();
+                                                    for (Content c : adapter.getCurrentList()) {
+                                                        newList.add(new Content(c)); // 깊은 복사
+                                                    }
+                                                    newList.get(selectedItemIndex).setImageUrl(downloadUri.toString());
+                                                    adapter.submitList(newList);
+                                                }).addOnFailureListener(e->{
+                                                    Log.d("WritePostActivity", "uri 가져오기 실패" + e.getMessage());
+                                                });
+                                    })
+                                    .addOnFailureListener(e -> {
+                                        // Check if the exception is a StorageException
+                                        if (e instanceof StorageException) {
+                                            StorageException se = (StorageException) e;
+                                            int errorCode = se.getErrorCode();
+                                            int httpResultCode = se.getHttpResultCode();
+
+                                            Log.e("STORAGE_ERROR", "ErrorCode: " + errorCode);
+                                            Log.e("STORAGE_ERROR", "HTTP Result Code: " + httpResultCode);
+                                            Log.e("STORAGE_ERROR", "Message: " + se.getMessage());
+
+                                            // Show a toast for immediate feedback
+                                            Toast.makeText(WritePostActivity.this,
+                                                    "Upload Failed: " + se.getMessage(),
+                                                    Toast.LENGTH_LONG).show();
+                                        } else {
+                                            // Handle generic errors
+                                            Log.e("STORAGE_ERROR", "Unknown error", e);
+                                            Toast.makeText(WritePostActivity.this,
+                                                    "Upload Error: " + e.getMessage(),
+                                                    Toast.LENGTH_SHORT).show();
+                                        }
+                                    });
                         }
                     }
                 }

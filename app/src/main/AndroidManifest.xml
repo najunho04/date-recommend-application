@@ -20,7 +20,7 @@
 
         <!-- 로그인 액티비티: 앱 시작점 -->
         <activity
-            android:name=".Activity.SplashActivity"
+            android:name=".Activity.UtilForUI.SplashActivity"
             android:exported="true"
             android:theme="@style/Theme.DateCourseRecommendApplication">
             <intent-filter>
@@ -30,14 +30,16 @@
 
         </activity>
         <activity android:name=".Activity.LoginActivity"/>
-        <activity android:name=".Activity.OpenPostActivity"/>
-        <activity android:name=".Activity.UserSetUpActivity"/>
-        <activity android:name=".Activity.RetweetActivity"/>
-        <activity android:name=".Activity.WritePostActivity"/>
-        <activity android:name=".Activity.UserCreateActivity"/>
-        <activity android:name=".Activity.UserProfileEditActivity"/>
-        <activity android:name=".Activity.EditPostActivity"/>
-        <activity android:name=".Activity.SearchLocationActivity"/>
+        <activity android:name=".Activity.ForPost.OpenPostActivity"/>
+        <activity android:name=".Activity.User.UserSetUpActivity"/>
+        <activity android:name=".Activity.ForPost.RetweetActivity"/>
+        <activity android:name=".Activity.ForPost.WritePostActivity"/>
+        <activity android:name=".Activity.User.UserCreateActivity"/>
+        <activity android:name=".Activity.User.UserProfileEditActivity"/>
+        <activity android:name=".Activity.ForPost.EditPostActivity"/>
+        <activity android:name=".Activity.UtilForUI.SearchLocationActivity"/>
+        <activity android:name=".Activity.UtilForUI.ViewMyPostsActivity"/>
+        <activity android:name=".Activity.UtilForUI.ViewMyLikesActivity"/>
 
         <activity
             android:name=".Activity.MainActivity"

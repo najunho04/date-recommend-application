@@ -17,7 +17,7 @@
             android:id="@+id/appLogo"
             android:layout_width="80dp"
             android:layout_height="80dp"
-            android:src="@drawable/ic_launcher_foreground"
+            android:src="@mipmap/ic_launcher_for_app_logo_round"
             android:contentDescription="App Logo"
             android:layout_marginBottom="12dp" />
 

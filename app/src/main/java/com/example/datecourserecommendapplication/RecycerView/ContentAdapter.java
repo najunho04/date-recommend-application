@@ -20,16 +20,44 @@ import androidx.recyclerview.widget.ListAdapter;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
-import com.example.datecourserecommendapplication.DB.Comment;
 import com.example.datecourserecommendapplication.DB.Content;
 import com.example.datecourserecommendapplication.DB.Location;
 import com.example.datecourserecommendapplication.R;
+import com.example.datecourserecommendapplication.Util.ItemTouchHelperListener;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.Objects;
 
-public class ContentAdapter extends ListAdapter<Content, ContentAdapter.ContentViewHolder> {
+public class ContentAdapter extends ListAdapter<Content, ContentAdapter.ContentViewHolder>
+        implements ItemTouchHelperListener {
+
+    //드래그 리스너 구현
+    @Override
+    public boolean onItemMove(int fromPos, int toPos) {
+        if (fromPos < getItemCount() && toPos < getItemCount()) {
+            List<Content> newList = getDeepCopiedList(); //이새끼 때문인듯?
+            Log.d("before onItemMove", newList.toString());
+            Collections.swap(newList, fromPos, toPos); // 순서 변경
+            Log.d("onItemMove", newList.toString());
+            submitList(newList); // 리스트 재반영
+            Log.d("onItemMove after submitList", newList.toString());
+            return true;
+        }
+        return false;
+    }
+
+    private List<Content> getDeepCopiedList() {
+        List<Content> copy = new ArrayList<>();
+        Log.d("getDeepCopiedList", getCurrentList().toString());
+        for (Content c : getCurrentList()) {
+            copy.add(new Content(c)); // copy constructor 필요
+        }
+        Log.d("getDeepCopiedList",copy.toString());
+        return copy;
+    }
+
     private boolean isEditableMode; // 화면에서 수정 가능 여부 -> True : WritePost,updatePost / False : retweetPost
 
     //리스너 구현 -> 리사이클러뷰 아이템 클릭 리스너
@@ -80,21 +108,10 @@ public class ContentAdapter extends ListAdapter<Content, ContentAdapter.ContentV
 
             boolean isLocationSame = oldName.equals(newName) && oldAddr.equals(newAddr);
 
-            // 로그 유지
-            Log.d("areContentsTheSame", "oldTitle: " + oldTitle + ", newTitle: " + newTitle);
-            Log.d("areContentsTheSame", "oldDesc: " + oldDesc + ", newDesc: " + newDesc);
-            Log.d("areContentsTheSame", "oldLocation: " + oldLoc.toString());
-            Log.d("areContentsTheSame", "newLocation: " + newLoc.toString());
-            Log.d("areContentsTheSame", "oldUri: " + oldUri);
-            Log.d("areContentsTheSame", "newUri: " + newUri);
-            Log.d("areContentsTheSame", "titlesTheSame: " + Objects.equals(oldTitle, newTitle));
-            Log.d("areContentsTheSame", "descriptionsTheSame: " + Objects.equals(oldDesc, newDesc));
-            Log.d("areContentsTheSame", "locationsTheSame: " + isLocationSame);
-            Log.d("areContentsTheSame", "urisTheSame: " + Objects.equals(oldUri, newUri));
-
             // 최종 비교 / 참고: Qbject.equals 사용하면 null 체크 필요 없음
             return Objects.equals(oldTitle, newTitle)
                     && Objects.equals(oldDesc, newDesc)
+                    //&& Objects.equals(oldItem.getLocation(), newItem.getLocation())
                     && isLocationSame
                     && Objects.equals(oldUri, newUri);
         }
@@ -117,15 +134,13 @@ public class ContentAdapter extends ListAdapter<Content, ContentAdapter.ContentV
     @Override
     public void onBindViewHolder(@NonNull ContentAdapter.ContentViewHolder holder, int position) {
         Content item = getItem(position);
-        if (!isEditableMode && item.getIsCore()) {
-            //리트윗 창 : original Post에서 핵심 데이트 코스들은 수정 불가
-            Log.d("ContentAdapter", "onCreateViewHolder success, bindWhenIsCoreTrue");
-            holder.bindWhenIsCoreTrue(item); // 수정 불가 모드 -> 해당 item: 부모 post의 핵심 데이트 코스
+        if (!isEditableMode && item.getIsCore() && item.getOriginalContentId() != null) {
+            //리트윗 창 전용
+            holder.bindWhenIsCoreTrue(item); //수정 불가 Bind
         } else if (item.getOriginalContentId() != null) {
-            //자식 post 업데이트 창 : originalPost 핵심 데이트 코스들은 수정 불가
-            holder.bindWhenIsCoreTrue(item); // 수정 불가 모드
+            //자식 Post -> parentContent Edit 창 전용
+            holder.bindWhenIsCoreTrue(item);
         } else {
-            Log.d("ContentAdapter", "onBindViewHolder success");
             holder.bind(item); // 기본 모드 (WritePost)
         }
     }
@@ -157,11 +172,10 @@ public class ContentAdapter extends ListAdapter<Content, ContentAdapter.ContentV
 
             //현재 isCore 상태에 따라 초기 tint 설정
             btnIsCore.setColorFilter(
-                    item.getIsCore() ? Color.RED : Color.GRAY,
+                    item.getIsCore() ? Color.YELLOW : Color.GRAY,
                     PorterDuff.Mode.SRC_IN
             );
 
-            // 현재는 값만 세팅 (로직은 추후 구현 예정)
             editTitle.setText(item.getTitle());
             tvLocation.setText(
                     item.getLocation().getName() != null ? item.getLocation().getName() : ""
@@ -233,7 +247,7 @@ public class ContentAdapter extends ListAdapter<Content, ContentAdapter.ContentV
 
                 // UI 색상 즉시 반영
                 btnIsCore.setColorFilter(
-                        newValue ? Color.RED : Color.GRAY,
+                        newValue ? Color.YELLOW : Color.GRAY,
                         PorterDuff.Mode.SRC_IN
                 );
                 if (listener != null) listener.onIsCoreClick(getLayoutPosition());
@@ -243,7 +257,7 @@ public class ContentAdapter extends ListAdapter<Content, ContentAdapter.ContentV
         private void bindWhenIsCoreTrue(Content item) {
             //현재 isCore 상태에 따라 초기 tint 설정
             btnIsCore.setColorFilter(
-                    item.getIsCore() ? Color.RED : Color.GRAY,
+                    item.getIsCore() ? Color.YELLOW : Color.GRAY,
                     PorterDuff.Mode.SRC_IN
             );
             // 현재는 값만 세팅 (로직은 추후 구현 예정)

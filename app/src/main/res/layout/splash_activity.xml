@@ -4,17 +4,32 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#CACACA"
-    tools:context=".Activity.SplashActivity">
+    android:background="#DBDBDB"
+    tools:context=".Activity.UtilForUI.SplashActivity">
 
     <ImageView
         android:id="@+id/imgLogo"
-        android:layout_width="120dp"
-        android:layout_height="120dp"
-        android:src="@drawable/ic_launcher_foreground"
+        android:layout_width="240dp"
+        android:layout_height="240dp"
+        android:src="@mipmap/ic_launcher_for_app_logo_round"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent" />
+
+    <TextView
+        android:layout_width="240dp"
+        android:layout_height="48dp"
+        app:layout_constraintBottom_toTopOf="@+id/imgLogo"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        android:layout_marginBottom="28dp"
+        android:text="Welcome to D.C.R."
+        android:backgroundTint="@color/black"
+        android:gravity="center"
+        android:textSize="28dp"
+        android:textColor="@color/black"
+        />
+
 
 </androidx.constraintlayout.widget.ConstraintLayout>

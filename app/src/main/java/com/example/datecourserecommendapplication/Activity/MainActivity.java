@@ -3,15 +3,19 @@ package com.example.datecourserecommendapplication.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
-import android.view.View;
 import android.widget.Button;
 import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.lifecycle.ViewModelProvider;
+import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.example.datecourserecommendapplication.Activity.ForPost.OpenPostActivity;
+import com.example.datecourserecommendapplication.Activity.ForPost.RetweetActivity;
+import com.example.datecourserecommendapplication.Activity.ForPost.WritePostActivity;
+import com.example.datecourserecommendapplication.Activity.User.UserSetUpActivity;
 import com.example.datecourserecommendapplication.DB.Post;
 import com.example.datecourserecommendapplication.DB.PostRepo;
 import com.example.datecourserecommendapplication.DB.User;
@@ -21,12 +25,9 @@ import com.example.datecourserecommendapplication.RecycerView.PostAdapter;
 import com.example.datecourserecommendapplication.Util.ApplicationUtil;
 import com.example.datecourserecommendapplication.ViewModel.MainViewModel;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
-import com.google.firebase.Timestamp;
 import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.auth.FirebaseUser;
 
 import java.util.ArrayList;
-import java.util.UUID;
 
 public class MainActivity extends AppCompatActivity {
     private Button btnUserInfo, btnMainFeed;
@@ -45,7 +46,9 @@ public class MainActivity extends AppCompatActivity {
 
         //adapter setup
         RecyclerView recyclerView = findViewById(R.id.recyclerViewPosts);
-        recyclerView.setLayoutManager(new LinearLayoutManager(this));
+        // 2열로 표시
+        GridLayoutManager gridLayoutManager = new GridLayoutManager(this, 2);
+        recyclerView.setLayoutManager(gridLayoutManager);
         adapter = new PostAdapter((post, anchorView, actionType) -> {
             switch (actionType) {
                 case LIKE:
@@ -59,6 +62,11 @@ public class MainActivity extends AppCompatActivity {
                     if(post.getParentPostId() != null){
                         //자신이 자식 post일 때
                         Toast.makeText(MainActivity.this, "이미 리트윗 된 게시물입니다.", Toast.LENGTH_SHORT).show();
+                        return;
+                    }
+                    if(mAuth.getCurrentUser().toString().equals(post.getCreatedBy())){
+                        //자기 게시물 리트윗 시도 시
+                        Toast.makeText(MainActivity.this, "본인이 작성한 게시물은 리트윗 불가합니다.", Toast.LENGTH_SHORT).show();
                         return;
                     }
                     Intent intent = new Intent(MainActivity.this, RetweetActivity.class);

@@ -1,23 +1,25 @@
-package com.example.datecourserecommendapplication.Activity;
+package com.example.datecourserecommendapplication.Activity.ForPost;
 
 import android.app.Activity;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
-import android.os.PersistableBundle;
 import android.util.Log;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageButton;
 import android.widget.Toast;
 
 import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.contract.ActivityResultContracts;
-import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.lifecycle.ViewModelProvider;
+import androidx.recyclerview.widget.ItemTouchHelper;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.example.datecourserecommendapplication.Activity.MainActivity;
+import com.example.datecourserecommendapplication.Activity.UtilForUI.SearchLocationActivity;
 import com.example.datecourserecommendapplication.DB.Content;
 import com.example.datecourserecommendapplication.DB.ContentRepo;
 import com.example.datecourserecommendapplication.DB.Location;
@@ -25,14 +27,17 @@ import com.example.datecourserecommendapplication.DB.Post;
 import com.example.datecourserecommendapplication.R;
 import com.example.datecourserecommendapplication.RecycerView.ContentAdapter;
 import com.example.datecourserecommendapplication.Util.ApplicationUtil;
+import com.example.datecourserecommendapplication.Util.ContentItemTouchHelperCallback;
 import com.example.datecourserecommendapplication.Util.TimeCheck;
 import com.example.datecourserecommendapplication.ViewModel.MainViewModel;
-import com.google.firebase.Timestamp;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.StorageReference;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.UUID;
 
 public class EditPostActivity extends AppCompatActivity {
     private ActivityResultLauncher<Intent> pickImageLauncher;
@@ -41,6 +46,7 @@ public class EditPostActivity extends AppCompatActivity {
     private int selectedItemIndex = -1;
 
     private Button btnSave, btnAddCourse;
+    private ImageButton btnBack;
     private EditText editTitle;
     private MainViewModel viewModel;
     private FirebaseAuth mAuth;
@@ -48,11 +54,14 @@ public class EditPostActivity extends AppCompatActivity {
     private ContentAdapter contentAdapter;
     private ContentRepo contentRepo;
     private TimeCheck timeCheck;
+    private FirebaseStorage storage;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_edit_post);
+
+        storage = FirebaseStorage.getInstance();
 
         mAuth = FirebaseAuth.getInstance();
         viewModel = new ViewModelProvider(this).get(MainViewModel.class);
@@ -63,6 +72,7 @@ public class EditPostActivity extends AppCompatActivity {
 
         btnSave = findViewById(R.id.btnSave);
         btnAddCourse = findViewById(R.id.btnAddCourse);
+        btnBack = findViewById(R.id.btnBack);
         editTitle = findViewById(R.id.editTitle);
 
         //get img intent
@@ -102,6 +112,10 @@ public class EditPostActivity extends AppCompatActivity {
             }
         });
         recyclerView.setAdapter(contentAdapter);
+        //드래그 로직 setup
+        ItemTouchHelper.Callback callback = new ContentItemTouchHelperCallback(contentAdapter);
+        ItemTouchHelper touchHelper = new ItemTouchHelper(callback);
+        touchHelper.attachToRecyclerView(recyclerView);
 
         //postId get
         String postId = getIntent().getStringExtra("postId");
@@ -140,6 +154,7 @@ public class EditPostActivity extends AppCompatActivity {
                 return;
             }
             List<Content> contentList = new ArrayList<>(contentAdapter.getCurrentList());
+            Log.d("after Drag", contentList.get(0).toString());
             if(contentList.isEmpty()){
                 Toast.makeText(EditPostActivity.this, "데이트 코스를 입력하세요", Toast.LENGTH_SHORT).show();
                 return;
@@ -217,6 +232,13 @@ public class EditPostActivity extends AppCompatActivity {
                 add(newContent);
             }});
         });
+
+        btnBack.setOnClickListener(v->{
+            Intent intent = new Intent(EditPostActivity.this, MainActivity.class);
+            startActivity(intent);
+            finish();
+        });
+
     }
 
     //locationLauncher setup : intent callback이라고 생각하면 편함. intent 속성, intent 후 callback data 처리
@@ -266,19 +288,35 @@ public class EditPostActivity extends AppCompatActivity {
                     if (result.getResultCode() == Activity.RESULT_OK && result.getData() != null) {
                         Uri uri = result.getData().getData();
                         if (uri != null && selectedItemIndex != -1) {
-                            // 권한 영구 보존
-                            final int takeFlags = result.getData().getFlags()
-                                    & (Intent.FLAG_GRANT_READ_URI_PERMISSION
-                                    | Intent.FLAG_GRANT_WRITE_URI_PERMISSION);
+                            //로컬 환경에서 uri 영구 보관
                             getContentResolver().takePersistableUriPermission(uri, Intent.FLAG_GRANT_READ_URI_PERMISSION);
 
-                            // RecyclerView의 리스트(uri) 업데이트
-                            List<Content> newList = new ArrayList<>();
-                            for (Content c : contentAdapter.getCurrentList()) {
-                                newList.add(new Content(c)); // 깊은 복사
-                            }
-                            newList.get(selectedItemIndex).setImageUrl(uri.toString());
-                            contentAdapter.submitList(newList);
+                            //storage 통해서 uri 전송 및 url 생성.
+                            String filename = UUID.randomUUID().toString() + ".jpg";
+                            //StorageReference
+                            StorageReference storageRef = storage.getReference()
+                                    .child("postImages/" + filename);
+
+                            storageRef.putFile(uri)
+                                    .addOnSuccessListener(task ->{
+                                        Log.d("EditPostActivity", "uri 업로드 성공");
+                                        storageRef.getDownloadUrl()
+                                                .addOnSuccessListener(downloadUri  ->{
+                                                    Log.d("EditPostActivity", "uri 불러오기 성공");
+
+                                                    // RecyclerView의 리스트(uri) 업데이트
+                                                    List<Content> newList = new ArrayList<>();
+                                                    for (Content c : contentAdapter.getCurrentList()) {
+                                                        newList.add(new Content(c)); // 깊은 복사
+                                                    }
+                                                    newList.get(selectedItemIndex).setImageUrl(downloadUri.toString());
+                                                    contentAdapter.submitList(newList);
+                                                }).addOnFailureListener(e->{
+                                                    Log.d("EditPostActivity", "uri 가져오기 실패" + e.getMessage());
+                                                });
+                                    }).addOnFailureListener(e->{
+                                        Log.d("EditPostActivity", e.getMessage());
+                                    });
                         }
                     }
                 }

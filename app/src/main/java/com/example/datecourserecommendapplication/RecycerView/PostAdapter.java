@@ -60,17 +60,15 @@ public class PostAdapter extends ListAdapter<Post, PostAdapter.PostViewHolder> {
         public PostViewHolder(@NonNull View itemView) {
             super(itemView);
             title = itemView.findViewById(R.id.post_title);
-            contentPreview = itemView.findViewById(R.id.post_content_preview);
-            meta = itemView.findViewById(R.id.post_meta);
             likes = itemView.findViewById(R.id.post_likes);
             retweet = itemView.findViewById(R.id.post_retweet);
             comments = itemView.findViewById(R.id.post_comments);
-            post_thumbnail = itemView.findViewById(R.id.post_thumbnail);
+            post_thumbnail = itemView.findViewById(R.id.post_image);
         }
         void bind(final Post post, final OnItemActionListener listener) {
             title.setText(post.getTitle());
-            contentPreview.setText(post.getPreviewText());
-            meta.setText(post.getCreatedBy() + " · " + post.getCreatedAt());
+            //contentPreview.setText(post.getPreviewText());
+            //meta.setText(post.getCreatedBy() + " · " + post.getCreatedAt());
             likes.setText(String.valueOf(post.getLikesCount()));
             retweet.setText(String.valueOf(post.getRetweetCount()));
             comments.setText(String.valueOf(post.getCommentsCount()));
@@ -79,6 +77,8 @@ public class PostAdapter extends ListAdapter<Post, PostAdapter.PostViewHolder> {
             if (post.getThumbnail() != null) {
                 Glide.with(itemView.getContext())
                         .load(post.getThumbnail())
+                        .centerCrop()
+                        .placeholder(R.drawable.ic_launcher_foreground)
                         .into(post_thumbnail);
             } else {
                 post_thumbnail.setImageDrawable(null);

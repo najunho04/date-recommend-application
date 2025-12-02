@@ -1,4 +1,4 @@
-package com.example.datecourserecommendapplication.Activity;
+package com.example.datecourserecommendapplication.Activity.User;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -11,6 +11,7 @@ import android.widget.Toast;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.example.datecourserecommendapplication.Activity.MainActivity;
 import com.example.datecourserecommendapplication.DB.User;
 import com.example.datecourserecommendapplication.DB.UserRepo;
 import com.example.datecourserecommendapplication.R;

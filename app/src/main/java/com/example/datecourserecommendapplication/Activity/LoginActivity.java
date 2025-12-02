@@ -7,12 +7,12 @@ import android.widget.Button;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.example.datecourserecommendapplication.Activity.User.UserCreateActivity;
 import com.example.datecourserecommendapplication.DB.UserRepo;
 import com.example.datecourserecommendapplication.R;
 import com.example.datecourserecommendapplication.Util.ApplicationUtil;
 import com.example.datecourserecommendapplication.Util.GoogleSignInCallback;
 import com.example.datecourserecommendapplication.Util.GoogleSignInHelper;
-import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
 import com.google.android.gms.common.SignInButton;
 import com.google.firebase.auth.AuthCredential;
 import com.google.firebase.auth.FirebaseAuth;

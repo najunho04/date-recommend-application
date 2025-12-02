@@ -1,4 +1,4 @@
-package com.example.datecourserecommendapplication.Activity;
+package com.example.datecourserecommendapplication.Activity.UtilForUI;
 
 import android.content.Intent;
 import android.os.Bundle;

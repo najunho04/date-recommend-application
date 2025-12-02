@@ -1,6 +1,7 @@
-package com.example.datecourserecommendapplication.Activity;
+package com.example.datecourserecommendapplication.Activity.ForPost;
 
 import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import android.text.Editable;
 import android.util.Log;
@@ -13,11 +14,11 @@ import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.example.datecourserecommendapplication.Activity.MainActivity;
 import com.example.datecourserecommendapplication.DB.Comment;
 import com.example.datecourserecommendapplication.DB.Content;
 import com.example.datecourserecommendapplication.DB.ContentRepo;
 import com.example.datecourserecommendapplication.DB.Post;
-import com.example.datecourserecommendapplication.DB.PostRepo;
 import com.example.datecourserecommendapplication.R;
 import com.example.datecourserecommendapplication.RecycerView.CommentAdapter;
 import com.example.datecourserecommendapplication.RecycerView.ReadContentAdapter;
@@ -26,14 +27,11 @@ import com.example.datecourserecommendapplication.ViewModel.CommentViewModel;
 import com.example.datecourserecommendapplication.ViewModel.MainViewModel;
 import com.google.android.material.appbar.MaterialToolbar;
 import com.google.android.material.textfield.TextInputEditText;
-import com.google.firebase.Timestamp;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Locale;
 
 public class OpenPostActivity extends AppCompatActivity {
 
@@ -148,9 +146,7 @@ public class OpenPostActivity extends AppCompatActivity {
             });
         });
 
-        //뒤로가기
-        topAppBar.setNavigationOnClickListener(v -> finish());
-        //수정 / 삭제 버튼
+        //수정 / 삭제 버튼 / 뒤로가기
         topAppBar.setOnMenuItemClickListener(item -> {
             Log.d("check", String.valueOf(isRetweetedPost));
             if (item.getItemId() == R.id.action_edit) {
@@ -170,6 +166,12 @@ public class OpenPostActivity extends AppCompatActivity {
             } else if (item.getItemId() == R.id.action_delete) {
                 // 삭제 로직
                 viewModel.deletePost(user.getUid(), postId);
+                Intent intent = new Intent(OpenPostActivity.this, MainActivity.class);
+                startActivity(intent);
+                finish();
+                return true;
+            } else if (item.getItemId() == R.id.action_back) {
+                // 뒤로가기 로직
                 Intent intent = new Intent(OpenPostActivity.this, MainActivity.class);
                 startActivity(intent);
                 finish();

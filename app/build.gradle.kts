@@ -71,6 +71,7 @@ dependencies {
     implementation ("com.google.android.gms:play-services-auth") //firebase for json file
     implementation("com.google.firebase:firebase-analytics") //firebase
     implementation("com.google.firebase:firebase-firestore:25.0.0") //firestore
+    implementation("com.google.firebase:firebase-storage") //firebase storage
 
     implementation("com.squareup.retrofit2:retrofit:3.0.0")
     implementation("com.squareup.retrofit2:converter-gson:3.0.0")

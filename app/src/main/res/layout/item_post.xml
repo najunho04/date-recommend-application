@@ -1,136 +1,149 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.cardview.widget.CardView
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/item_post_root"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:layout_margin="8dp"
-    app:cardCornerRadius="12dp"
-    app:cardElevation="3dp"
     android:foreground="?attr/selectableItemBackground"
-    android:clickable="true"
-    android:focusable="true">
+    app:cardCornerRadius="12dp"
+    app:cardUseCompatPadding="true"
+    app:cardElevation="4dp"
+    tools:layout_width="200dp"
+    tools:layout_height="200dp">
+
+<androidx.constraintlayout.widget.ConstraintLayout
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:layout_height="wrap_content">
+
+    <!-- ⭐ 정사각형 비율 유지 -->
+<androidx.constraintlayout.widget.ConstraintLayout
+android:id="@+id/post_container"
+android:layout_width="0dp"
+android:layout_height="0dp"
+app:layout_constraintDimensionRatio="1:1"
+app:layout_constraintTop_toTopOf="parent"
+app:layout_constraintBottom_toBottomOf="parent"
+app:layout_constraintStart_toStartOf="parent"
+app:layout_constraintEnd_toEndOf="parent">
+
+
+    <ImageView
+        android:id="@+id/post_image"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:scaleType="centerCrop"
+        app:layout_constraintDimensionRatio="H,1:1"
+        app:layout_constraintBottom_toTopOf="@+id/text_container"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        tools:src="@drawable/ic_launcher_background" />
 
     <LinearLayout
+    android:id="@+id/text_container"
+    android:orientation="vertical"
+    android:layout_width="0dp"
+    android:layout_height="0dp"
+    android:padding="8dp"
+    android:background="#FAFAFA"
+    app:layout_constraintStart_toStartOf="parent"
+    app:layout_constraintEnd_toEndOf="parent"
+    app:layout_constraintBottom_toBottomOf="parent"
+    app:layout_constraintTop_toBottomOf="@id/post_image">
+
+    <!-- 제목 -->
+    <TextView
+        android:id="@+id/post_title"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="vertical"
-        android:layout_margin="15dp"
-        android:padding="12dp">
+        android:text="포스트 제목"
+        android:textStyle="bold"
+        android:textSize="14sp"
+        android:ellipsize="end"
+        android:maxLines="1" />
 
-        <!-- 🔹 썸네일 (content 대표 이미지 or 기본 이미지) -->
-        <ImageView
-            android:id="@+id/post_thumbnail"
-            android:layout_width="match_parent"
-            android:layout_height="180dp"
-            android:scaleType="centerCrop"
-            android:adjustViewBounds="true"
-            android:src="@drawable/ic_launcher_foreground" />
+    <!-- 날짜 -->
+    <TextView
+        android:id="@+id/post_date"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="2024-01-01"
+        android:textSize="12sp"
+        android:textColor="#777777"
+        android:paddingTop="2dp" />
 
-        <!-- 🔹 제목 -->
+    <!-- 🔹 좋아요 / 리트윗 / 댓글 텍스트 아이콘 -->
+    <LinearLayout
+        android:orientation="horizontal"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center_vertical"
+        android:paddingTop="6dp">
+
+        <Button
+            android:id="@+id/post_likes_btn"
+            android:layout_width="32dp"
+            android:layout_height="32dp"
+            android:text="❤"
+            android:textSize="11sp"
+            android:textColor="#333333"
+            android:backgroundTint="#F5F5F5"
+            android:layout_marginEnd="4dp"/>
+
         <TextView
-            android:id="@+id/post_title"
-            android:layout_width="match_parent"
+            android:id="@+id/post_likes"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="8dp"
-            android:text="Post Title"
-            android:textSize="18sp"
-            android:textStyle="bold"
-            android:textColor="@android:color/black" />
-
-        <!-- 🔹 내용 (일부 미리보기) -->
-        <TextView
-            android:id="@+id/post_content_preview"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="4dp"
-            android:text="This is a preview of the post content..."
-            android:textSize="14sp"
+            android:text="1"
+            android:textSize="13sp"
             android:textColor="#555555"
-            android:maxLines="3"
-            android:ellipsize="end" />
+            android:layout_marginEnd="8dp"/>
 
-        <!-- 🔹 작성자 + 작성일 -->
+        <Button
+            android:id="@+id/post_retweet_btn"
+            android:layout_width="32dp"
+            android:layout_height="32dp"
+            android:text="🔁"
+            android:textSize="14sp"
+            android:backgroundTint="#F5F5F5"
+            android:textColor="#333333"
+            android:layout_marginEnd="4dp"/>
+
         <TextView
-            android:id="@+id/post_meta"
-            android:layout_width="match_parent"
+            android:id="@+id/post_retweet"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="6dp"
-            android:text="작성자 · 2025.11.08"
-            android:textSize="12sp"
-            android:textColor="#888888" />
+            android:text="1"
+            android:textSize="13sp"
+            android:textColor="#555555"
+            android:layout_marginEnd="8dp"/>
 
-        <!-- 🔹 좋아요/댓글 카운트 -->
-        <LinearLayout
-            android:layout_width="match_parent"
+        <Button
+            android:id="@+id/post_comments_btn"
+            android:layout_width="32dp"
+            android:layout_height="32dp"
+            android:text="💬"
+            android:textSize="14sp"
+            android:backgroundTint="#F5F5F5"
+            android:textColor="#333333"
+            android:layout_marginEnd="4dp"/>
+
+        <TextView
+            android:id="@+id/post_comments"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="8dp"
-            android:orientation="horizontal"
-            android:gravity="start">
-
-            <Button
-                android:id="@+id/post_likes_btn"
-                android:layout_width="48dp"
-                android:layout_height="wrap_content"
-                android:text="❤️"
-                android:textSize="13sp"
-                android:textColor="#666666"
-                android:backgroundTint="@color/white"
-                android:layout_marginEnd="4dp"
-                android:clickable="true"
-                android:focusable="true"/>
-            <TextView
-                android:id="@+id/post_likes"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="1"
-                android:textSize="13sp"
-                android:textColor="#666666"
-                android:layout_marginEnd="8dp"/>
-
-
-            <Button
-                android:id="@+id/post_retweet_btn"
-                android:layout_width="48dp"
-                android:layout_height="wrap_content"
-                android:text="r"
-                android:textSize="13sp"
-                android:backgroundTint="@color/white"
-                android:textColor="#666666"
-                android:layout_marginEnd="4dp"
-                android:clickable="true"
-                android:focusable="true"/>
-
-            <TextView
-                android:id="@+id/post_retweet"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="1"
-                android:textSize="13sp"
-                android:textColor="#666666"
-                android:layout_marginEnd="8dp"/>
-
-            <Button
-                android:id="@+id/post_comments_btn"
-                android:layout_width="48dp"
-                android:layout_height="wrap_content"
-                android:text="💬"
-                android:textSize="13sp"
-                android:backgroundTint="@color/white"
-                android:textColor="#666666"
-                android:layout_marginEnd="4dp"
-                android:clickable="true"
-                android:focusable="true"/>
-
-            <TextView
-                android:id="@+id/post_comments"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="1"
-                android:textSize="13sp"
-                android:textColor="#666666"
-                android:layout_marginEnd="8dp"/>
-
-        </LinearLayout>
-
+            android:text="1"
+            android:textSize="13sp"
+            android:textColor="#555555"/>
     </LinearLayout>
-</androidx.cardview.widget.CardView>
+
+</LinearLayout>
+
+</androidx.constraintlayout.widget.ConstraintLayout>
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+    </androidx.cardview.widget.CardView>

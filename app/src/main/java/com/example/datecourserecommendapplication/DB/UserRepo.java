@@ -262,4 +262,35 @@ public class UserRepo {
             Log.d("addCommentInUser", e.getMessage());
         });
     }
+
+    public interface OnGetMyPostsListener {
+        void onSuccess(List<String> postsId);
+        void onError(String errorMessage);
+    }
+
+    public void getMyPostsId(String uid, OnGetMyPostsListener listener){
+        db.collection("Users").document(uid)
+                .get()
+                .addOnSuccessListener(documentSnapshot -> {
+                    if(documentSnapshot.get("postsId") == null){
+                        listener.onSuccess(new ArrayList<>());
+                    }else {
+                        List<String> myPostsId = (List<String>) documentSnapshot.get("postsId");
+                        listener.onSuccess(myPostsId);
+                    }
+                });
+    }
+
+    public void getMyLikesPostsId(String uid, OnGetMyPostsListener listener){
+        db.collection("Users").document(uid)
+                .get()
+                .addOnSuccessListener(documentSnapshot ->{
+                    if(documentSnapshot.get("likesPost") == null){
+                        listener.onSuccess(new ArrayList<>());
+                    }else {
+                        List<String> myPostsId = (List<String>) documentSnapshot.get("likesPost");
+                        listener.onSuccess(myPostsId);
+                    }
+                });
+    }
 }

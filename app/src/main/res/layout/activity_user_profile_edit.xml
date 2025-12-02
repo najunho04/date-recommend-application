@@ -5,7 +5,7 @@
     android:id="@+id/layoutProfileEdit"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".Activity.UserProfileEditActivity">
+    tools:context=".Activity.User.UserProfileEditActivity">
 
     <ScrollView
         android:layout_width="0dp"

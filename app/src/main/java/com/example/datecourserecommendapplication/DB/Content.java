@@ -1,5 +1,7 @@
 package com.example.datecourserecommendapplication.DB;
 
+import androidx.annotation.NonNull;
+
 import com.google.firebase.Timestamp;
 
 import java.util.HashMap;
@@ -45,7 +47,12 @@ public class Content {
         this.title = other.title;
         this.startTime = other.startTime;
         this.endTime = other.endTime;
-        this.location = other.location;
+
+        // Location deep copy
+        if (other.location != null) {
+            this.location = new Location(other.location);
+        }
+
         this.imageUrl = other.imageUrl;
         this.description = other.description;
         this.order = other.order;
@@ -121,5 +128,24 @@ public class Content {
         if (value != null) {
             map.put(key, value);
         }
+    }
+
+    @Override
+    public String toString(){
+        return "Content{" +
+                "contentId='" + contentId + '\'' +
+                ", title='" + title + '\'' +
+                ", startTime=" + (startTime != null ? startTime.toDate() : null) +
+                ", startTimeString='" + startTimeString + '\'' +
+                ", endTime=" + (endTime != null ? endTime.toDate() : null) +
+                ", endTimeString='" + endTimeString + '\'' +
+                ", location=" + (location != null ? location.toString() : null) +
+                ", imageUrl='" + imageUrl + '\'' +
+                ", description='" + description + '\'' +
+                ", order=" + order +
+                ", isCore=" + isCore +
+                ", originalPostId='" + originalPostId + '\'' +
+                ", originalContentId='" + originalContentId + '\'' +
+                '}';
     }
 }

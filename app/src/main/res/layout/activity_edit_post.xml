@@ -26,7 +26,7 @@
                 android:layout_width="36dp"
                 android:layout_height="36dp"
                 android:background="?attr/selectableItemBackgroundBorderless"
-                android:src="@drawable/ic_launcher_background"
+                android:src="@android:drawable/ic_delete"
                 android:contentDescription="뒤로가기" />
 
             <TextView
@@ -83,13 +83,15 @@
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/rvContents"
                 android:layout_width="match_parent"
-                android:layout_height="322dp"
+                android:layout_height="480dp"
                 />
 
             <Button
                 android:id="@+id/btnAddCourse"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:layout_marginStart="64dp"
+                android:layout_marginEnd="64dp"
                 android:text="데이트 코스 추가(+)" />
 
         </LinearLayout>

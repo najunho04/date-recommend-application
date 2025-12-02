@@ -3,11 +3,16 @@
     xmlns:app="http://schemas.android.com/apk/res-auto">
     <item
         android:id="@+id/action_edit"
-        android:title="수정"
-        android:icon="@drawable/common_google_signin_btn_icon_light"
+        android:title="edit"
         app:showAsAction="always" />
     <item
         android:id="@+id/action_delete"
-        android:title="삭제"
+        android:title="del"
         app:showAsAction="always" />
+    <item
+        android:id="@+id/action_back"
+        android:icon="@android:drawable/ic_delete"
+        android:title="뒤로"
+        app:showAsAction="always"
+        />
 </menu>

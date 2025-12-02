@@ -2,26 +2,25 @@ package com.example.datecourserecommendapplication.DB;
 
 import android.util.Log;
 
-import androidx.annotation.NonNull;
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 
 import com.example.datecourserecommendapplication.Util.ApplicationUtil;
 import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.Task;
 import com.google.android.gms.tasks.Tasks;
 import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
+import com.google.firebase.firestore.FieldPath;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.FirebaseFirestoreException;
 import com.google.firebase.firestore.ListenerRegistration;
-import com.google.firebase.firestore.Source;
 import com.google.firebase.firestore.WriteBatch;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
+import java.util.concurrent.atomic.AtomicInteger;
 
 public class PostRepo {
     private FirebaseFirestore db;
@@ -57,9 +56,9 @@ public class PostRepo {
                             post.setId(doc.getId()); // Firestore doc ID 저장
                             posts.add(post);
                         }
-                        posts.sort((a, b) -> b.getCreatedAt().compareTo(a.getCreatedAt()));
+                        posts.sort((a, b) -> b.getCreatedAt().compareTo(a.getCreatedAt())); //정렬 코드
                         postsLiveData.setValue(posts);
-                        //DB 바뀔 때마다 postsLiveData 업데이트, orderBy시 CreateBy만 변경 감시가능 -> 삭제 후 정렬 코드 추가
+                        //DB 바뀔 때마다 postsLiveData 업데이트, orderBy시 CreateBy만 변경 감시가능 -> orderBy 대신 정렬 코드 추가
                         //-> like, comment 등 다른 field까지 감시 가능 but doc 많아질수록 효율감소
                         //=> 따라서 추후 like, comment 등 주요 field 리스너 추가 예정
                     }
@@ -84,7 +83,8 @@ public class PostRepo {
         batch.set(newPostRef, post.toMap());
 
         // 3. Content SubCollection batch에 추가
-        for (Content content : contentList) {
+        for (int i = 0; i < contentList.size(); i++) {
+            Content content = contentList.get(i);
             // contentId 미리 생성
             DocumentReference contentRef = newPostRef.collection("Content").document();
             content.setContentId(contentRef.getId());
@@ -92,7 +92,7 @@ public class PostRepo {
             if(content.getOriginalPostId() == null) content.setOriginalPostId(null);
             if(content.getOriginalContentId() == null) content.setOriginalContentId(null);
             //order Set
-            content.setOrder(contentList.indexOf(content));
+            content.setOrder(i);
             batch.set(contentRef, content.toMap());
         }
         // 4. Batch commit
@@ -131,6 +131,46 @@ public class PostRepo {
                 .addOnFailureListener(e -> {
                     listener.onError(e.getMessage());
                 });
+    }
+
+    public interface OnPostsListener{
+        void onSuccess(List<Post> posts);
+        void onError(String errorMessage);
+    }
+
+    public void getPostsById(List<String> postsId, OnPostsListener listener){
+        List<List<String>> chunks = chunkList(postsId); // 10개씩 나누기
+        List<Post> result = new ArrayList<>();
+
+        //AtomicInteger : 멀티스레드 환경에서 안전하게 증가하는 정수 타입
+        AtomicInteger counter = new AtomicInteger(0);
+        for (List<String> chunk : chunks) {
+            db.collection("Posts")
+                    //whereIn: 여러 documentId의 document를 한 번에 가져오는 Firestore 쿼리
+                    //10개까지만 처리 가능하기 때문에 chcuk를 사전에 나눠 에러 방지
+                    .whereIn(FieldPath.documentId(), chunk)
+                    .get()
+                    .addOnSuccessListener(querySnapshot -> {
+                        for (DocumentSnapshot doc : querySnapshot) {
+                            Post post = doc.toObject(Post.class);
+                            result.add(post);
+                        }
+                        if (counter.incrementAndGet() == chunks.size()) {
+                            listener.onSuccess(result);
+                        }
+                    })
+                    .addOnFailureListener(e -> {
+                        Log.d("getPostsById", "failed " + e.getMessage());
+                    });
+        }
+
+    }
+    private static List<List<String>> chunkList(List<String> list) {
+        List<List<String>> chunks = new ArrayList<>();
+        for (int i = 0; i < list.size(); i += 10) {
+            chunks.add(list.subList(i, Math.min(list.size(), i + 10)));
+        }
+        return chunks;
     }
     public void deletePost(String uid, String postId) {
         DocumentReference postRef = db.collection("Posts").document(postId);

@@ -115,18 +115,26 @@ public class MainViewModel extends ViewModel {
         });
     }
 
-    public void getPostInUser(Post post){
-        //실시간으로 add하려니 null발생. 이슈 : addPost 후 get 리스너 로직에서 postId가 생성되는데 로직 시간이 엇갈려서 null발생
+    public interface OnPostsListener{
+        void onSuccess(List<Post> posts);
+        void onError(String errorMessage);
+    }
+    public void getPostsInUser(List<String> postsId, OnPostsListener listener){
+        postRepo.getPostsById(postsId, new PostRepo.OnPostsListener(){
+            @Override
+            public void onSuccess(List<Post> posts) {
+                listener.onSuccess(posts);
+            }
+            @Override
+            public void onError(String errorMessage) {
+                listener.onError(errorMessage);
+            }
+        });
     }
 
     public void addRetweetPost(Post post, String uid, List<Content> contentList, Post originalPost, List<Content> originalContentList
             , OnCompleteListener<Void> listener){
         postRepo.addRetweetPost(post, uid, contentList, originalPost, originalContentList,
-                new OnCompleteListener<Void>() {
-            @Override
-            public void onComplete(@NonNull Task<Void> task) {
-                listener.onComplete(Tasks.forResult(null));
-            }
-        });
+                task -> listener.onComplete(Tasks.forResult(null)));
     }
 }

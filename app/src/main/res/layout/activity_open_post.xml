@@ -6,24 +6,28 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-    <!-- 상단 AppBar -->
-    <com.google.android.material.appbar.MaterialToolbar
-        android:id="@+id/topAppBar"
+    <!-- 앱바 상단 고정 -->
+    <com.google.android.material.appbar.AppBarLayout
         android:layout_width="match_parent"
-        android:layout_height="?attr/actionBarSize"
-        android:background="?attr/colorSurface"
-        app:navigationIcon="@drawable/ic_launcher_foreground"
-        app:title="게시글"
-        app:titleCentered="true"
-        app:menu="@menu/menu_post_actions" />
+        android:layout_height="wrap_content"
+        android:theme="@style/ThemeOverlay.MaterialComponents.ActionBar">
+
+        <com.google.android.material.appbar.MaterialToolbar
+            android:id="@+id/topAppBar"
+            android:layout_width="match_parent"
+            android:layout_height="60dp"
+            app:title="상세 페이지"
+            app:menu="@menu/menu_post_actions"
+            android:background="@color/white" />
+
+    </com.google.android.material.appbar.AppBarLayout>
 
     <androidx.core.widget.NestedScrollView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         app:layout_behavior="@string/appbar_scrolling_view_behavior"
-        android:padding="16dp"
+        android:padding="4dp"
         android:clipToPadding="false"
-        android:layout_marginTop="?attr/actionBarSize"
         android:dividerPadding="8dp"
         android:fillViewport="true">
 
@@ -60,7 +64,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="나준호"
-                        android:textStyle="bold"
+                        android:textColor="@color/black"
                         android:textSize="16sp" />
 
                     <TextView
@@ -68,6 +72,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="2025.11.10 14:30"
+                        android:textColor="@color/black"
                         android:textSize="12sp" />
                 </LinearLayout>
             </LinearLayout>
@@ -77,6 +82,8 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="original post: null"
+                android:textColor="@color/black"
+                android:layout_marginStart="8dp"
                 android:textSize="18sp"
                 android:clickable="true"
                 android:focusable="true"
@@ -88,6 +95,7 @@
                 android:id="@+id/postTitle"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:layout_marginStart="8dp"
                 android:text="데이트 코스 추천"
                 android:textAppearance="@style/TextAppearance.Material3.HeadlineSmall"
                 android:textStyle="bold"
@@ -100,59 +108,62 @@
                 android:layout_height="wrap_content"
                 android:nestedScrollingEnabled="false"
                 android:clipToPadding="false"
-                android:paddingBottom="16dp" />
+                android:textColor="@color/black" />
 
-        </LinearLayout>
-    </androidx.core.widget.NestedScrollView>
-
-    <!-- 🔹 댓글 RecyclerView -->
-    <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/commentRecyclerView"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="240dp"
-        android:layout_marginBottom="72dp"
-        android:layout_gravity="bottom"
-        android:clipToPadding="false"
-        android:nestedScrollingEnabled="false"
-        android:paddingHorizontal="16dp"
-        android:scrollbars="none" />
-
-    <!-- 🔹 하단 댓글 입력창 -->
-    <LinearLayout
-        android:id="@+id/commentInputLayout"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_gravity="bottom"
-        android:padding="12dp"
-        android:background="?attr/colorSurface"
-        android:elevation="4dp"
-        android:orientation="horizontal"
-        android:gravity="center_vertical">
-
-        <com.google.android.material.textfield.TextInputLayout
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:hint="댓글을 입력하세요">
-
-            <com.google.android.material.textfield.TextInputEditText
-                android:id="@+id/commentEditText"
+            <!-- 🔹 하단 댓글 입력창 -->
+            <LinearLayout
+                android:id="@+id/commentInputLayout"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:imeOptions="actionSend"
-                android:inputType="textCapSentences|textMultiLine"
-                android:maxLines="3"
-                android:scrollbars="vertical" />
-        </com.google.android.material.textfield.TextInputLayout>
+                android:layout_gravity="bottom"
+                android:padding="4dp"
+                android:background="?attr/colorSurface"
+                android:elevation="4dp"
+                android:orientation="horizontal"
+                android:gravity="center_vertical"
+                android:layout_marginTop="8dp"
+                android:layout_marginBottom="8dp"
+                >
 
-        <Button
-            android:id="@+id/sendCommentBtn"
-            android:layout_width="60dp"
-            android:layout_height="60dp"
-            android:backgroundTint="#FFFDFD"
-            android:text="저장"
-            android:textColor="#000000" />
-    </LinearLayout>
+                <com.google.android.material.textfield.TextInputLayout
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:hint="댓글을 입력하세요">
+
+                    <com.google.android.material.textfield.TextInputEditText
+                        android:id="@+id/commentEditText"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:imeOptions="actionSend"
+                        android:inputType="textCapSentences|textMultiLine"
+                        android:maxLines="2"
+                        android:scrollbars="vertical"
+                        android:layout_marginEnd="4dp"/>
+                </com.google.android.material.textfield.TextInputLayout>
+
+                <Button
+                    android:id="@+id/sendCommentBtn"
+                    android:layout_width="60dp"
+                    android:layout_height="60dp"
+                    android:backgroundTint="#FFFDFD"
+                    android:text="저장"
+                    android:textColor="#000000" />
+            </LinearLayout>
+
+
+            <!-- 🔹 댓글 RecyclerView -->
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/commentRecyclerView"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="bottom"
+                android:clipToPadding="false"
+                android:nestedScrollingEnabled="false"
+                android:paddingHorizontal="16dp" />
+        </LinearLayout>
+
+
+    </androidx.core.widget.NestedScrollView>
 
 </androidx.coordinatorlayout.widget.CoordinatorLayout>
