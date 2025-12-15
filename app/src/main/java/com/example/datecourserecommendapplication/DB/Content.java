@@ -4,7 +4,9 @@ import androidx.annotation.NonNull;
 
 import com.google.firebase.Timestamp;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 public class Content {
@@ -19,10 +21,10 @@ public class Content {
     // 장소 정보 구조
     private Location location; //위치정보
 
-    private String imageUrl;        // 이미지 URI
+    private List<String> imageUrl;      // 이미지 URI
     private String description;     // 부가 설명
     private int order;              // 1~7 정렬 순서
-    private boolean isCore; // true면 부모가 “핵심 데이트 코스”로 지정한 것
+    private boolean isCore = false; // true면 부모가 “핵심 데이트 코스”로 지정한 것
 
     // 리트윗 복제 시 원본 추적용 필드
     private String originalPostId; //자기가 오리지널 -> null
@@ -79,8 +81,8 @@ public class Content {
     public Location getLocation() { return location; }
     public void setLocation(Location location) { this.location = location; }
 
-    public String getImageUrl() { return imageUrl; }
-    public void setImageUrl(String imageUrl) { this.imageUrl = imageUrl; }
+    public List<String> getImageUrl() { return imageUrl; }
+    public void setImageUrl(List<String> imageUrl) { this.imageUrl = imageUrl; }
 
     public String getDescription() { return description; }
     public void setDescription(String description) { this.description = description; }

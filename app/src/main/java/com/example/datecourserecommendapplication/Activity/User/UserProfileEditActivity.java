@@ -16,6 +16,7 @@ import com.example.datecourserecommendapplication.DB.User;
 import com.example.datecourserecommendapplication.DB.UserRepo;
 import com.example.datecourserecommendapplication.R;
 import com.example.datecourserecommendapplication.Util.ApplicationUtil;
+import com.example.datecourserecommendapplication.Util.Area;
 import com.google.android.material.chip.Chip;
 import com.google.android.material.chip.ChipGroup;
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
@@ -166,7 +167,7 @@ public class UserProfileEditActivity extends AppCompatActivity {
         //지역 수정
         btnSelectLocation.setOnClickListener(v-> {
             btnSelectLocation.setText("완료");
-            String[] areas = {"서울", "대전", "부산", "대구", "경기", "광주", "강원", "기타"};
+            String[] areas = Area.AREAS;
             new MaterialAlertDialogBuilder(this)
                     .setTitle("지역")
                     .setItems(areas, (dialog , which) -> {

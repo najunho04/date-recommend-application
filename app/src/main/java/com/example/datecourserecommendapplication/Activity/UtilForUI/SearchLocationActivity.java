@@ -15,7 +15,9 @@ import com.example.datecourserecommendapplication.R;
 import com.example.datecourserecommendapplication.RecycerView.PlaceAdapter;
 import com.example.datecourserecommendapplication.Retrofit.KakaoRetrofitClient;
 import com.example.datecourserecommendapplication.Retrofit.KakaoSearchResponse;
+import com.example.datecourserecommendapplication.Util.KakaoKey;
 import com.google.android.material.textfield.TextInputEditText;
+import com.google.gson.Gson;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -46,7 +48,7 @@ public class SearchLocationActivity extends AppCompatActivity {
         selectedPlace = new Location();
         placeList = new ArrayList<>();
 
-        kakaoKey = "REDACTED_KAKAO_REST_API_KEY";
+        kakaoKey = KakaoKey.kakaoKey;
         itemIndex = getIntent().getIntExtra("itemIndex", -1);
 
         //adapter setup
@@ -71,6 +73,7 @@ public class SearchLocationActivity extends AppCompatActivity {
             //위치 정보와 함께 intent? activity 종료?
             //장소 선택 시 setResult()로 데이터를 전달
             Intent data = new Intent();
+            selectedPlace.splitAddressIntoRegions();
             data.putExtra("place_name", selectedPlace.getName());
             data.putExtra("address", selectedPlace.getAddress());
             data.putExtra("lat", selectedPlace.getLatitude());

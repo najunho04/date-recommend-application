@@ -1,9 +1,12 @@
 package com.example.datecourserecommendapplication.DB;
 
+import androidx.annotation.NonNull;
+
 import com.google.firebase.Timestamp;
 import com.google.firebase.firestore.Exclude;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -17,13 +20,18 @@ public class Post implements Serializable {
     private int likesCount;
     private int commentsCount;
     private int retweetCount;
-    private List<String> likesBy;    // 좋아요 누른 유저 UID 리스트
+    private List<String> likesBy = new ArrayList<>();    // 좋아요 누른 유저 UID 리스트
     // comment:  전용 서브 collection 에서 관리
-    private List<String> retweetBy;  // 리트윗 누른 유저 UID 리스트
+    private List<String> retweetBy = new ArrayList<>();  // 리트윗 누른 유저 UID 리스트
     private String parentPostId; //자신이 부모 post인지 자식 post인지 확인하는 용도 부모 post일때: null / 자식: 부모 postId
     private boolean isRetweeted; //리트윗 확인 목적
-
     private String thumbnail; //Uri String
+    private List<String> postInterests = new ArrayList<>();
+    private int score = 0;
+    private String coreRegion;
+    private double coreLatitude;
+    private double coreLongitude;
+
 
 
     // 🔹 Firestore 직렬화용 기본 생성자 (필수)
@@ -90,6 +98,19 @@ public class Post implements Serializable {
     public String getThumbnail() {return thumbnail;}
     public void setThumbnail(String thumbnail) {this.thumbnail = thumbnail;}
 
+    public List<String> getPostInterests() {return postInterests;}
+    public void setPostInterests(List<String> postInterests) {this.postInterests = postInterests;}
+
+    public int getScore(){return score;}
+    public void setScore(int score){this.score = score;}
+
+    public String getCoreRegion() {return coreRegion;}
+    public void setCoreRegion(String coreRegion) {this.coreRegion = coreRegion;}
+    public double getCoreLatitude() {return coreLatitude;}
+    public void setCoreLatitude(double coreLatitude) {this.coreLatitude = coreLatitude;}
+    public double getCoreLongitude() {return coreLongitude;}
+    public void setCoreLongitude(double coreLongitude) {this.coreLongitude = coreLongitude;}
+
 
 
     // 🔹 Firestore에 저장할 때 Map 변환용
@@ -109,6 +130,24 @@ public class Post implements Serializable {
         map.put("isRetweeted", isRetweeted);
         map.put("parentPostId", parentPostId);
         map.put("thumbnail", thumbnail);
+        map.put("postInterests", postInterests);
+        map.put("score", score);
+        map.put("coreRegion", coreRegion);
+        map.put("coreLatitude", coreLatitude);
+        map.put("coreLongitude", coreLongitude);
         return map;
+    }
+
+    @NonNull
+    @Override
+    public String toString() {
+        return "Post{" +
+                "id='" + id + '\'' +
+                ", title='" + title + '\'' +
+                ", previewText='" + previewText + '\'' +
+                ", createdBy='" + createdBy + '\'' +
+                ", createdAt='" + createdAt + '\'' +
+                ", likesCount=" + likesCount +
+                ", commentsCount=" + commentsCount;
     }
 }

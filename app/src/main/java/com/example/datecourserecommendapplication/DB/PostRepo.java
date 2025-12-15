@@ -70,6 +70,27 @@ public class PostRepo {
             registration = null;
         }
     }
+    public void getPosts(OnPostsListener listener) {
+        db.collection("Posts").get()
+                .addOnSuccessListener(querySnapshot -> {
+                    if (querySnapshot != null)  {
+                        List<Post> posts = new ArrayList<>();
+                        for (DocumentSnapshot doc : querySnapshot) {
+                            Post post = doc.toObject(Post.class);
+                            post.setId(doc.getId()); // Firestore doc ID 저장
+                            posts.add(post);
+                        }
+                        posts.sort((a, b) -> b.getCreatedAt().compareTo(a.getCreatedAt())); //정렬 코드
+
+                        listener.onSuccess(posts);
+                    }
+                })
+                .addOnFailureListener(e -> {
+                    Log.d("getPosts", "failed");
+                    listener.onError(e.getMessage());
+                });
+    }
+
     public void addPost(Post post, String uid, List<Content> contentList, OnPostListener listener){
         WriteBatch batch = db.batch();
 

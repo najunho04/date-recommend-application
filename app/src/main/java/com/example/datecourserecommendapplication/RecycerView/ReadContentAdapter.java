@@ -1,10 +1,15 @@
 package com.example.datecourserecommendapplication.RecycerView;
 
+import android.annotation.SuppressLint;
 import android.graphics.drawable.Drawable;
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
+import android.widget.FrameLayout;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -20,9 +25,41 @@ import com.bumptech.glide.load.engine.GlideException;
 import com.bumptech.glide.request.RequestListener;
 import com.bumptech.glide.request.target.Target;
 import com.example.datecourserecommendapplication.DB.Content;
+import com.example.datecourserecommendapplication.DB.Post;
+import com.example.datecourserecommendapplication.DB.PostRepo;
 import com.example.datecourserecommendapplication.R;
+import com.example.datecourserecommendapplication.Util.ClusterPreviewBottomSheet;
+import com.kakao.vectormap.GestureType;
+import com.kakao.vectormap.KakaoMap;
+import com.kakao.vectormap.KakaoMapReadyCallback;
+import com.kakao.vectormap.KakaoMapSdk;
+import com.kakao.vectormap.LatLng;
+import com.kakao.vectormap.MapLifeCycleCallback;
+import com.kakao.vectormap.MapReadyCallback;
+import com.kakao.vectormap.MapView;
+import com.kakao.vectormap.camera.CameraAnimation;
+import com.kakao.vectormap.camera.CameraUpdate;
+import com.kakao.vectormap.camera.CameraUpdateFactory;
+import com.kakao.vectormap.label.Label;
+import com.kakao.vectormap.label.LabelLayer;
+import com.kakao.vectormap.label.LabelLayerOptions;
+import com.kakao.vectormap.label.LabelOptions;
+import com.kakao.vectormap.label.LabelStyle;
+import com.kakao.vectormap.label.LabelStyles;
+
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 
 public class ReadContentAdapter extends ListAdapter<Content, ReadContentAdapter.ReadContentViewHolder> {
+
+    public interface OnCLickMapViewDetailListener {
+        void onClcik(double lat, double lng);
+    }
+
+    private final OnCLickMapViewDetailListener listener;
+
+
     //DiffUtil logic
     private static final DiffUtil.ItemCallback<Content> DIFF_CALLBACK = new DiffUtil.ItemCallback<Content>() {
         @Override
@@ -31,6 +68,7 @@ public class ReadContentAdapter extends ListAdapter<Content, ReadContentAdapter.
             String newId = newItem.getContentId();
             return oldId != null && oldId.equals(newId);
         }
+
         @Override
         public boolean areContentsTheSame(@NonNull Content oldItem, @NonNull Content newItem) {
             String oldTitle = oldItem.getTitle() != null ? oldItem.getTitle() : "";
@@ -40,8 +78,10 @@ public class ReadContentAdapter extends ListAdapter<Content, ReadContentAdapter.
             return oldTitle.equals(newTitle) && oldDesc.equals(newDesc);
         }
     };
-    public ReadContentAdapter() {
+
+    public ReadContentAdapter(OnCLickMapViewDetailListener listener) {
         super(DIFF_CALLBACK);
+        this.listener = listener;
     }
 
     @NonNull
@@ -57,56 +97,158 @@ public class ReadContentAdapter extends ListAdapter<Content, ReadContentAdapter.
     public void onBindViewHolder(@NonNull ReadContentAdapter.ReadContentViewHolder holder, int position) {
         Content item = getItem(position);
         Log.d("ReadContentAdapter", "onCreateViewHolder success");
-        holder.bind(item);
+        holder.bind(item, listener);
     }
 
-    public static class ReadContentViewHolder extends RecyclerView.ViewHolder{
-        TextView tvTitle, tvStartTime, tvEndTime, tvPlace, tvDescription;
+    public static class ReadContentViewHolder extends RecyclerView.ViewHolder {
+        private int localUriListIndex = 0;
+        private List<String> localUriList = new ArrayList<>(Arrays.asList(null, null, null));
+        private KakaoMap kakaoMap;
+        private LabelLayer centerLayer;
+        TextView tvTitle, tvStartTime, tvEndTime, tv_place_name, tv_place_address, tvDescription;
         ImageView imgPreview;
-
+        ImageButton imgBackBtn, imgFrontBtn;
+        MapView mapView;
+        Button mapDetailBtn;
         public ReadContentViewHolder(@NonNull View itemView) {
             super(itemView);
             tvTitle = itemView.findViewById(R.id.tvTitle);
             tvStartTime = itemView.findViewById(R.id.tvStartTime);
             tvEndTime = itemView.findViewById(R.id.tvEndTime);
-            tvPlace = itemView.findViewById(R.id.tvPlace);
+            tv_place_address = itemView.findViewById(R.id.tv_place_address);
+            tv_place_name = itemView.findViewById(R.id.tv_place_name);
             tvDescription = itemView.findViewById(R.id.tvDescription);
             imgPreview = itemView.findViewById(R.id.imgPreview);
+            imgBackBtn = itemView.findViewById(R.id.imgBackBtn);
+            imgFrontBtn = itemView.findViewById(R.id.imgFrontBtn);
+            mapView = itemView.findViewById(R.id.mapView);
+            mapDetailBtn = itemView.findViewById(R.id.mapDetailBtn);
         }
 
-        public void bind(Content item) {
+        @SuppressLint("ClickableViewAccessibility")
+        public void bind(Content item, OnCLickMapViewDetailListener listener) {
+
+            localUriList = item.getImageUrl();
+
             tvTitle.setText(item.getTitle());
             tvStartTime.setText(item.getStartTimeString());
             tvEndTime.setText(item.getEndTimeString());
-            tvPlace.setText(item.getLocation().getName());
+            tv_place_name.setText(item.getLocation().getName());
+            tv_place_address.setText(item.getLocation().getAddress());
             tvDescription.setText(item.getDescription());
 
+            double lat = item.getLocation().getLatitude();
+            double lng = item.getLocation().getLongitude();
+
+            mapView.start(mapLifeCycleCallback, new KakaoMapReadyCallback() {
+                @Override
+                public void onMapReady(@NonNull KakaoMap map) {
+                    // 인증 후 API 가 정상적으로 실행될 때 호출됨
+                    kakaoMap = map; // 지도 객체 저장
+                    Log.d("mapView", "onMapReady");
+
+                    // 드래그(=Pan) 비활성화
+                    kakaoMap.setGestureEnable(GestureType.Pan, false);
+                    // 줌/회전/틸트 비활성화
+                    kakaoMap.setGestureEnable(GestureType.Zoom, false);
+                    kakaoMap.setGestureEnable(GestureType.Rotate, false);
+                    kakaoMap.setGestureEnable(GestureType.Tilt, false);
+
+                    centerLayer = kakaoMap.getLabelManager().getLayer();
+                    moveMap(lat, lng);
+                }
+                @Override
+                public int getZoomLevel() {
+                    return 17;
+                }
+            });
+
             //img setup
-            if (item.getImageUrl() != null) {
+            if (localUriList.get(localUriListIndex) != null) {
                 Glide.with(itemView.getContext())
-                        .load(item.getImageUrl())
+                        .load(item.getImageUrl().get(localUriListIndex))
                         .centerCrop()
                         .placeholder(R.drawable.ic_launcher_foreground)
                         .error(R.drawable.ic_launcher_foreground)
-                        .listener(new RequestListener<Drawable>() {
-                            @Override
-                            public boolean onLoadFailed(@Nullable GlideException e, Object model,
-                                                        Target<Drawable> target, boolean isFirstResource) {
-                                Log.e("GLIDE", "Load failed: " + e.getMessage());
-                                return false;
-                            }
-
-                            @Override
-                            public boolean onResourceReady(Drawable resource, Object model,
-                                                           Target<Drawable> target,
-                                                           DataSource dataSource, boolean isFirstResource) {
-                                return false;
-                            }
-                        })
                         .into(imgPreview);
             } else {
                 imgPreview.setImageDrawable(null);
             }
+
+            //back img btn setup
+            imgBackBtn.setOnClickListener(v -> {
+                if (localUriListIndex == 0) {
+                    return;
+                } else {
+                    localUriListIndex -= 1;
+                    Log.d("localUriListIndex", "localUriListIndex: " + localUriListIndex);
+                    if (localUriList.get(localUriListIndex) != null) {
+                        Glide.with(itemView.getContext())
+                                .load(item.getImageUrl().get(localUriListIndex))
+                                .into(imgPreview);
+                    } else {
+                        imgPreview.setImageDrawable(null);
+                    }
+                }
+            });
+
+            //front img btn setup
+            imgFrontBtn.setOnClickListener(v -> {
+                if (localUriListIndex == 2) {
+                    return;
+                } else {
+                    localUriListIndex += 1;
+                    Log.d("localUriListIndex", "localUriListIndex: " + localUriListIndex);
+                    if (localUriList.get(localUriListIndex) != null) {
+                        Glide.with(itemView.getContext())
+                                .load(item.getImageUrl().get(localUriListIndex))
+                                .into(imgPreview);
+                    } else {
+                        imgPreview.setImageDrawable(null);
+                    }
+                }
+            });
+
+            mapDetailBtn.setOnClickListener(v -> {
+                listener.onClcik(lat, lng);
+            });
+
+        }
+
+        private final MapLifeCycleCallback mapLifeCycleCallback = new MapLifeCycleCallback() {
+            @Override
+            public void onMapDestroy() {
+                // 지도 API 가 정상적으로 종료될 때 호출됨
+                Log.d("mapView", "onMapDestroy");
+            }
+            @Override
+            public void onMapError(Exception e) {
+                // 인증 실패 및 지도 사용 중 에러가 발생할 때 호출됨
+                Log.d("mapView", "onMapError: " + e.getMessage());
+            }
+        };
+
+        public void moveMap(double lat, double lng){
+
+            if(kakaoMap==null){
+                Log.d("moveMap", "kakaoMap is null. Wait for onMapReady callback.");
+                return;
+            }
+
+            LatLng targetPosition = LatLng.from(lat, lng);
+            CameraUpdate move = CameraUpdateFactory.newCenterPosition(targetPosition);
+            kakaoMap.moveCamera(move, CameraAnimation.from(500, true, true));
+
+            LabelStyle iconStyle = LabelStyle.from(R.drawable.my_label);
+            LabelStyles styles = kakaoMap.getLabelManager()
+                    .addLabelStyles(LabelStyles.from(iconStyle));
+
+            LabelOptions options = LabelOptions.from(targetPosition)
+                    .setStyles(styles);
+
+            Label label = centerLayer.addLabel(options);
+
+            label.show();
         }
     }
 }

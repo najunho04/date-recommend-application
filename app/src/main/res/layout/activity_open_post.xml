@@ -42,8 +42,7 @@
                 android:orientation="horizontal"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:gravity="center_vertical"
-                android:paddingBottom="12dp">
+                android:gravity="center_vertical">
 
                 <ImageView
                     android:id="@+id/authorImage"
@@ -75,6 +74,83 @@
                         android:textColor="@color/black"
                         android:textSize="12sp" />
                 </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginEnd="8dp"
+                    android:gravity="end">
+
+                    <LinearLayout
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:orientation="vertical"
+                        android:gravity="center"
+                        android:layout_marginEnd="4dp">
+
+                        <ImageButton
+                            android:id="@+id/likeBtn"
+                            android:layout_width="40dp"
+                            android:layout_height="40dp"
+                            android:src = "@drawable/heart_empty"
+                            android:background="#FFFFFF"/>
+
+                        <TextView
+                            android:id="@+id/likeCount"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="10"
+                            android:textStyle="bold"
+                            android:gravity="center" />
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:orientation="vertical"
+                        android:gravity="center"
+                        android:layout_marginEnd="4dp">
+
+                        <ImageButton
+                            android:id="@+id/commentBtn"
+                            android:layout_width="40dp"
+                            android:layout_height="40dp"
+                            android:src = "@drawable/comment"
+                            android:background="#FFFFFF"/>
+
+                        <TextView
+                            android:id="@+id/commentCount"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="10"
+                            android:textStyle="bold"
+                            android:gravity="center" />
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:orientation="vertical"
+                        android:gravity="center"
+                        android:layout_marginEnd="4dp">
+
+                        <ImageButton
+                            android:id="@+id/retweetBtn"
+                            android:layout_width="40dp"
+                            android:layout_height="40dp"
+                            android:src = "@drawable/retweet"
+                            android:background="#FFFFFF"/>
+
+                        <TextView
+                            android:id="@+id/retweetCount"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="10"
+                            android:textStyle="bold"
+                            android:gravity="center" />
+                    </LinearLayout>
+
+                </LinearLayout>
             </LinearLayout>
 
             <TextView
@@ -82,8 +158,8 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="original post: null"
-                android:textColor="@color/black"
-                android:layout_marginStart="8dp"
+                android:textColor="#999999"
+                android:layout_marginStart="16dp"
                 android:textSize="18sp"
                 android:clickable="true"
                 android:focusable="true"
@@ -95,7 +171,7 @@
                 android:id="@+id/postTitle"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="8dp"
+                android:layout_marginStart="16dp"
                 android:text="데이트 코스 추천"
                 android:textAppearance="@style/TextAppearance.Material3.HeadlineSmall"
                 android:textStyle="bold"

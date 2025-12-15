@@ -41,6 +41,9 @@ public class UserRepo {
         user.put("createdAt", Timestamp.now());
         user.put("comments", new ArrayList<>());
         user.put("postsId", new ArrayList<>());
+        user.put("myPoint", 500);
+
+        Log.d("addUser", "start Logic");
 
         db.collection("Users")
                 .document(FirebaseAuth.getInstance().getUid()) // 로그인된 사용자 UID -> document 주소

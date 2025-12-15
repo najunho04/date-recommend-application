@@ -16,6 +16,7 @@ import com.example.datecourserecommendapplication.Activity.LoginActivity;
 import com.example.datecourserecommendapplication.Activity.MainActivity;
 import com.example.datecourserecommendapplication.Activity.UtilForUI.ViewMyLikesActivity;
 import com.example.datecourserecommendapplication.Activity.UtilForUI.ViewMyPostsActivity;
+import com.example.datecourserecommendapplication.Activity.ViewPostInMapActivity;
 import com.example.datecourserecommendapplication.DB.UserRepo;
 import com.example.datecourserecommendapplication.R;
 import com.example.datecourserecommendapplication.Util.ApplicationUtil;
@@ -34,7 +35,7 @@ import org.jetbrains.annotations.Nullable;
 public class UserSetUpActivity extends AppCompatActivity {
     private FirebaseAuth mAuth;
 
-    private Button btnMainFeed;
+    private Button btnMainFeed, btnViewMap;
     private Button btnChangeNickname, btnMyPosts, btnMyLikes, btnMyInfo, btnLogout, btnWithdraw;
     private UserRepo userRepo;
 
@@ -59,6 +60,14 @@ public class UserSetUpActivity extends AppCompatActivity {
         btnMainFeed.setOnClickListener(v -> {
             Intent intent = new Intent(this, MainActivity.class);
             intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
+            startActivity(intent);
+            finish();
+        });
+
+        //btnViewMap setup
+        btnViewMap = findViewById(R.id.btnViewMap);
+        btnViewMap.setOnClickListener(v->{
+            Intent intent = new Intent(this, ViewPostInMapActivity.class);
             startActivity(intent);
             finish();
         });

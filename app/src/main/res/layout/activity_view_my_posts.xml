@@ -25,7 +25,7 @@
             android:id="@+id/imgLogo"
             android:layout_width="48dp"
             android:layout_height="48dp"
-            android:src="@mipmap/ic_launcher_for_app_logo_round"
+            android:src="@drawable/app_logo_color"
             android:contentDescription="App Logo"
             android:layout_marginEnd="8dp" />
 

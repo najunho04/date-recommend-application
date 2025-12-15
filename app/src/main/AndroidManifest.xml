@@ -40,6 +40,7 @@
         <activity android:name=".Activity.UtilForUI.SearchLocationActivity"/>
         <activity android:name=".Activity.UtilForUI.ViewMyPostsActivity"/>
         <activity android:name=".Activity.UtilForUI.ViewMyLikesActivity"/>
+        <activity android:name=".Activity.ViewPostInMapActivity"/>
 
         <activity
             android:name=".Activity.MainActivity"

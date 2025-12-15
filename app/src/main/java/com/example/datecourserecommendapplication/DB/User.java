@@ -15,6 +15,7 @@ public class User {
     private Timestamp createdAt;        // 가입 시간
     private List<String> comments;      // 내가 쓴 댓글 ID 리스트
     private List<String> postsId;       // 내가 쓴 게시물 ID 리스트
+    private int myPoint;
 
     //Firestore 직렬화를 위해 반드시 빈 생성자가 필요함
     public User() {}
@@ -56,4 +57,6 @@ public class User {
 
     public List<String> getPostsId() { return postsId; }
     public void setPostsId(List<String> postsId) { this.postsId = postsId; }
+    public int getMyPoint(){return myPoint;}
+    public void setMyPoint(int myPoint){this.myPoint = myPoint;}
 }

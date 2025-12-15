@@ -26,6 +26,9 @@ public class ApplicationUtil extends Application {
         postRepo = new PostRepo(db);
         commentRepo = new CommentRepo(db);
         contentRepo = new ContentRepo(db);
+
+        //kakaoMap 초기화
+        com.kakao.vectormap.KakaoMapSdk.init(this, "REDACTED_KAKAO_NATIVE_APP_KEY");
     }
 
     public static FirebaseFirestore getFirestore(){

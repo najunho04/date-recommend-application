@@ -1,0 +1,104 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical"
+    android:padding="20dp"
+    android:background="@android:color/white"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
+
+    <ImageView
+        android:id="@+id/preview_thumb"
+        android:layout_width="100dp"
+        android:layout_height="100dp"
+        android:scaleType="centerCrop"
+        android:layout_gravity="center_horizontal" />
+
+    <TextView
+        android:id="@+id/preview_title"
+        android:textSize="18sp"
+        android:textStyle="bold"
+        android:text="preview_title"
+        android:layout_gravity="center_horizontal"
+        android:layout_marginTop="10dp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"/>
+
+    <LinearLayout
+        android:orientation="horizontal"
+        android:layout_marginTop="8dp"
+        android:padding="4dp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal">
+
+        <TextView
+            android:id="@+id/preview_likes"
+            android:text="likes"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="14sp"
+            android:layout_marginRight="14dp" />
+
+        <TextView
+            android:id="@+id/preview_comments"
+            android:text="comment"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="14sp"
+            android:layout_marginRight="14dp" />
+
+        <TextView
+            android:id="@+id/preview_retweets"
+            android:text="retweet"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="14sp" />
+    </LinearLayout>
+
+    <TextView
+        android:id="@+id/preview_tip"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal"
+        android:layout_marginTop="20dp"
+        android:hint="게시물 확인 시 50p 차감됩니다"
+        android:textColor="#CC3333"
+        android:textSize="15sp" />
+
+    <TextView
+        android:id="@+id/my_point"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal"
+        android:layout_marginTop="20dp"
+        android:hint="현재 남은 포인트 : 100p"
+        />
+
+    <LinearLayout
+        android:orientation="horizontal"
+        android:layout_marginTop="16dp"
+        android:gravity="center"
+        android:layout_width="match_parent"
+        android:layout_height="100dp">
+
+        <Button
+            android:id="@+id/btn_yes"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="예"/>
+
+        <View
+            android:layout_width="10dp"
+            android:layout_height="wrap_content"/>
+
+        <Button
+            android:id="@+id/btn_no"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="아니오"/>
+
+    </LinearLayout>
+
+</LinearLayout>

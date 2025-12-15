@@ -4,6 +4,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -15,6 +16,12 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.bumptech.glide.Glide;
 import com.example.datecourserecommendapplication.DB.Post;
 import com.example.datecourserecommendapplication.R;
+import com.example.datecourserecommendapplication.Util.ApplicationUtil;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class PostAdapter extends ListAdapter<Post, PostAdapter.PostViewHolder> {
 
@@ -53,8 +60,12 @@ public class PostAdapter extends ListAdapter<Post, PostAdapter.PostViewHolder> {
     }
 
     class PostViewHolder extends RecyclerView.ViewHolder {//ViewHolder setup.
-        TextView title, contentPreview, meta, likes, retweet, comments;
+        ImageButton post_likes_btn, post_comments_btn, post_retweet_btn;
+        TextView title, likes, retweet, comments;
         ImageView post_thumbnail;
+        boolean isLiked = false;
+        private final FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+
 
         //viewHolder setup
         public PostViewHolder(@NonNull View itemView) {
@@ -64,14 +75,26 @@ public class PostAdapter extends ListAdapter<Post, PostAdapter.PostViewHolder> {
             retweet = itemView.findViewById(R.id.post_retweet);
             comments = itemView.findViewById(R.id.post_comments);
             post_thumbnail = itemView.findViewById(R.id.post_image);
+
+            post_likes_btn = itemView.findViewById(R.id.post_likes_btn);
+            post_retweet_btn = itemView.findViewById(R.id.post_retweet_btn);
+            post_comments_btn = itemView.findViewById(R.id.post_comments_btn);
         }
         void bind(final Post post, final OnItemActionListener listener) {
             title.setText(post.getTitle());
-            //contentPreview.setText(post.getPreviewText());
-            //meta.setText(post.getCreatedBy() + " · " + post.getCreatedAt());
-            likes.setText(String.valueOf(post.getLikesCount()));
             retweet.setText(String.valueOf(post.getRetweetCount()));
             comments.setText(String.valueOf(post.getCommentsCount()));
+            likes.setText(String.valueOf(post.getLikesCount()));
+
+            List<String> likesBy = post.getLikesBy();
+            if(likesBy == null){likesBy = new ArrayList<>();}
+            if(likesBy.contains(user.getUid())){
+                post_likes_btn.setImageResource(R.drawable.heart_full);
+                isLiked = true;
+            }else {
+                post_likes_btn.setImageResource(R.drawable.heart_empty);
+                isLiked = false;
+            }
 
             //img setup
             if (post.getThumbnail() != null) {
@@ -88,15 +111,15 @@ public class PostAdapter extends ListAdapter<Post, PostAdapter.PostViewHolder> {
                 if (listener != null) listener.onItemClicked(post, itemView, PostActionType.CLICK);
             });
 
-            itemView.findViewById(R.id.post_likes_btn).setOnClickListener(v->{
+            post_likes_btn.setOnClickListener(v->{
                 if (listener != null) listener.onItemClicked(post, itemView, PostActionType.LIKE);
             });
 
-            itemView.findViewById(R.id.post_retweet_btn).setOnClickListener(v->{
+            post_retweet_btn.setOnClickListener(v->{
                 if (listener != null) listener.onItemClicked(post, itemView, PostActionType.RETWEET);
             });
 
-            itemView.findViewById(R.id.post_comments_btn).setOnClickListener(v->{
+            post_comments_btn.setOnClickListener(v->{
                 if (listener != null) listener.onItemClicked(post, itemView, PostActionType.COMMENT);
             });
         }

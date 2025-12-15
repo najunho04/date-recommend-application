@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical"
+    android:padding="24dp"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
+
+    <!-- 메시지 -->
+    <TextView
+        android:id="@+id/tvMessage"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="50p를 소진하여 게시물을 열람하시겠습니까?"
+        android:textSize="16sp"
+        android:textStyle="bold"
+        android:textColor="@android:color/black"
+        android:paddingBottom="16dp" />
+
+    <!-- 현재 포인트 표시 -->
+    <TextView
+        android:id="@+id/tvCurrentPoint"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="현재 보유 포인트: 120p"
+        android:textSize="14sp"
+        android:textColor="@color/black"
+        android:paddingBottom="8dp" />
+
+</LinearLayout>

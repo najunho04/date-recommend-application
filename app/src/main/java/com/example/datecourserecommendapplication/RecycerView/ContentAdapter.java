@@ -26,6 +26,7 @@ import com.example.datecourserecommendapplication.R;
 import com.example.datecourserecommendapplication.Util.ItemTouchHelperListener;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 import java.util.Objects;
@@ -63,7 +64,7 @@ public class ContentAdapter extends ListAdapter<Content, ContentAdapter.ContentV
     //리스너 구현 -> 리사이클러뷰 아이템 클릭 리스너
     public interface OnContentActionListener {
         void onDeleteClick(int position);
-        void onSelectImageClick(int position);
+        void onSelectImageClick(int position, int localUriListIndex, List<String> localUriList);
         void onIsCoreClick(int position);
         void onSelectLocation(int position);
     }
@@ -92,8 +93,8 @@ public class ContentAdapter extends ListAdapter<Content, ContentAdapter.ContentV
             String newDesc = newItem.getDescription() != null ? newItem.getDescription() : "";
 
             //Uri 필드 비교
-            String oldUri = oldItem.getImageUrl();
-            String newUri = newItem.getImageUrl();
+            List<String> oldUriList = oldItem.getImageUrl();
+            List<String> newUriList = newItem.getImageUrl();
 
             //Location 비교를 위한 객체 생성
             Location oldLoc = oldItem.getLocation() != null ? oldItem.getLocation() : new Location("", "", 0, 0);
@@ -108,12 +109,16 @@ public class ContentAdapter extends ListAdapter<Content, ContentAdapter.ContentV
 
             boolean isLocationSame = oldName.equals(newName) && oldAddr.equals(newAddr);
 
+            Log.d("DiffUtil", "oldUriList: " + oldUriList);
+            Log.d("DiffUtil", "newUriList: " + newUriList);
+            Log.d("DiffUtil", "result: " + Objects.equals(oldUriList, newUriList) );
+
             // 최종 비교 / 참고: Qbject.equals 사용하면 null 체크 필요 없음
             return Objects.equals(oldTitle, newTitle)
                     && Objects.equals(oldDesc, newDesc)
                     //&& Objects.equals(oldItem.getLocation(), newItem.getLocation())
                     && isLocationSame
-                    && Objects.equals(oldUri, newUri);
+                    && Objects.equals(oldUriList, newUriList);
         }
     };
     public ContentAdapter(boolean isEditableMode, OnContentActionListener listener) {
@@ -147,7 +152,10 @@ public class ContentAdapter extends ListAdapter<Content, ContentAdapter.ContentV
 
     public class ContentViewHolder extends RecyclerView.ViewHolder {
         // item_content.xml에 있는 View들
-        ImageButton btnDelete, btnIsCore;
+
+        private int localUriListIndex;
+        private List<String> localUriList;
+        ImageButton btnDelete, btnIsCore, imgBackBtn, imgFrontBtn;
         EditText editTitle, editDescription, editStartTime, editEndTime;
         TextView tvLocation;
         ImageView imgPreview;
@@ -155,6 +163,9 @@ public class ContentAdapter extends ListAdapter<Content, ContentAdapter.ContentV
 
         public ContentViewHolder(@NonNull View itemView) {
             super(itemView);
+
+            localUriListIndex = 0;
+            localUriList = new ArrayList<>(Arrays.asList(null, null, null));
 
             btnDelete = itemView.findViewById(R.id.btnDelete);
             btnIsCore = itemView.findViewById(R.id.btnIsCore);
@@ -166,9 +177,13 @@ public class ContentAdapter extends ListAdapter<Content, ContentAdapter.ContentV
 
             imgPreview = itemView.findViewById(R.id.imgPreview);
             btnSelectImage = itemView.findViewById(R.id.btnSelectImage);
+            imgBackBtn = itemView.findViewById(R.id.imgBackBtn);
+            imgFrontBtn = itemView.findViewById(R.id.imgFrontBtn);
         }
 
         public void bind(Content item) {
+
+            localUriList = item.getImageUrl();
 
             //현재 isCore 상태에 따라 초기 tint 설정
             btnIsCore.setColorFilter(
@@ -202,16 +217,46 @@ public class ContentAdapter extends ListAdapter<Content, ContentAdapter.ContentV
                 }
             });
 
-            // 이미지 로딩 로직도 추후 글라이드로 추가 예정
             //Glide : Uri -> String이여도 변환후 자동 반영 -> 개섹스
-            if (item.getImageUrl() != null) {
+            if (localUriList.get(localUriListIndex) != null) {
                 Glide.with(itemView.getContext())
-                        .load(item.getImageUrl())
+                        .load(localUriList.get(localUriListIndex))
                         .into(imgPreview);
             } else {
                 imgPreview.setImageDrawable(null);
             }
 
+            imgBackBtn.setOnClickListener(v->{
+                if(localUriListIndex == 0){
+                    return;
+                }else{
+                    localUriListIndex -= 1 ;
+                    Log.d("localUriListIndex", "localUriListIndex: " + localUriListIndex);
+                    if (localUriList.get(localUriListIndex) != null) {
+                        Glide.with(itemView.getContext())
+                                .load(localUriList.get(localUriListIndex))
+                                .into(imgPreview);
+                    } else {
+                        imgPreview.setImageDrawable(null);
+                    }
+                }
+            });
+
+            imgFrontBtn.setOnClickListener(v->{
+                if(localUriListIndex == 2){
+                    return;
+                }else {
+                    localUriListIndex += 1;
+                    Log.d("localUriListIndex", "localUriListIndex: " + localUriListIndex);
+                    if (localUriList.get(localUriListIndex) != null) {
+                        Glide.with(itemView.getContext())
+                                .load(item.getImageUrl().get(localUriListIndex))
+                                .into(imgPreview);
+                    } else {
+                        imgPreview.setImageDrawable(null);
+                    }
+                }
+            });
 
             // TextWatcher를 등록하여 입력 시 Content 객체에 바로 반영
             editTitle.addTextChangedListener(new SimpleTextWatcher() {
@@ -239,7 +284,7 @@ public class ContentAdapter extends ListAdapter<Content, ContentAdapter.ContentV
                 if (listener != null) listener.onDeleteClick(getLayoutPosition()); //item view 삭제
             });
             btnSelectImage.setOnClickListener(v -> {
-                if (listener != null) listener.onSelectImageClick(getLayoutPosition()); //이미지 선택
+                if (listener != null) listener.onSelectImageClick(getLayoutPosition(), localUriListIndex, localUriList); //이미지 선택
             });
             btnIsCore.setOnClickListener(v -> {
                 boolean newValue = !item.getIsCore();
@@ -255,6 +300,9 @@ public class ContentAdapter extends ListAdapter<Content, ContentAdapter.ContentV
         }
 
         private void bindWhenIsCoreTrue(Content item) {
+
+            localUriList = item.getImageUrl();
+
             //현재 isCore 상태에 따라 초기 tint 설정
             btnIsCore.setColorFilter(
                     item.getIsCore() ? Color.YELLOW : Color.GRAY,
@@ -268,13 +316,46 @@ public class ContentAdapter extends ListAdapter<Content, ContentAdapter.ContentV
             editDescription.setText(item.getDescription());
             editStartTime.setText(item.getStartTimeString());
             editEndTime.setText(item.getEndTimeString());
-            if (item.getImageUrl() != null) {
+
+            if (localUriList.get(localUriListIndex) != null) {
                 Glide.with(itemView.getContext())
                         .load(item.getImageUrl())
                         .into(imgPreview);
             } else {
                 imgPreview.setImageDrawable(null);
             }
+
+            imgBackBtn.setOnClickListener(v->{
+                if(localUriListIndex == 0){
+                    return;
+                }else{
+                    localUriListIndex -= 1 ;
+                    Log.d("localUriListIndex", "localUriListIndex: " + localUriListIndex);
+                    if (localUriList.get(localUriListIndex) != null) {
+                        Glide.with(itemView.getContext())
+                                .load(item.getImageUrl().get(localUriListIndex))
+                                .into(imgPreview);
+                    } else {
+                        imgPreview.setImageDrawable(null);
+                    }
+                }
+            });
+
+            imgFrontBtn.setOnClickListener(v->{
+                if(localUriListIndex == 2){
+                    return;
+                }else {
+                    localUriListIndex += 1;
+                    Log.d("localUriListIndex", "localUriListIndex: " + localUriListIndex);
+                    if (localUriList.get(localUriListIndex) != null) {
+                        Glide.with(itemView.getContext())
+                                .load(item.getImageUrl().get(localUriListIndex))
+                                .into(imgPreview);
+                    } else {
+                        imgPreview.setImageDrawable(null);
+                    }
+                }
+            });
 
             // 2) 모든 EditText 수정 불가
             editTitle.setEnabled(false);

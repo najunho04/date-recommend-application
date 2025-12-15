@@ -8,6 +8,7 @@ import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 
+import com.example.datecourserecommendapplication.CloudFunction.CloudFunctionManager;
 import com.example.datecourserecommendapplication.DB.Content;
 import com.example.datecourserecommendapplication.DB.Post;
 import com.example.datecourserecommendapplication.DB.PostRepo;
@@ -24,6 +25,7 @@ import com.google.firebase.firestore.ServerTimestamp;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
+import java.util.Objects;
 
 
 public class MainViewModel extends ViewModel {
@@ -31,11 +33,16 @@ public class MainViewModel extends ViewModel {
     private PostRepo postRepo = ApplicationUtil.getPostRepo();
     private UserRepo userRepo = ApplicationUtil.getUserRepo();
 
-    private final LiveData<List<Post>> posts = postRepo.getPost();
+    //postRepo랑 연결되어 있는 postList : DB변경 시 sourcePosts도 변경
+    private final LiveData<List<Post>> sourcePosts = postRepo.getPost();
+
+    //필터, 검색, 좋아요.. 등 클라이언트 로직과 연결되어 UI에 반영되는 postList
+    private final MutableLiveData<List<Post>> uiPosts = new MutableLiveData<>();
 
     public LiveData<List<Post>> getPosts(){
-        return posts; //observe와 연결
+        return uiPosts; //observe와 연결
     }
+    private final CloudFunctionManager cloudFunctionManager = new CloudFunctionManager();
 
     @Override
     protected void onCleared() {
@@ -48,6 +55,23 @@ public class MainViewModel extends ViewModel {
             @Override
             public void onSuccess(Post post) {
                 Log.d("addPost", "success addPost, content and add post In User DB. All Success.");
+
+                Log.d("callAddPoint", "postId: " + post.getId());
+
+                cloudFunctionManager.callAddPoint(post.getId(), new CloudFunctionManager.PointCallback(){
+
+                    @Override
+                    public void onSuccess(boolean success, String result) {
+                        if(Objects.equals(result, "addPoint")){
+                            Log.d("callAddPoint", "success add Point");
+                        }
+                    }
+
+                    @Override
+                    public void onError(Exception e) {
+                        Log.d("callAddPoint", "failed add Point" + e.getMessage());
+                    }
+                });
             }
             @Override
             public void onError(String errorMessage) {

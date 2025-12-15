@@ -12,6 +12,7 @@ import android.widget.Toast;
 
 import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.contract.ActivityResultContracts;
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.ItemTouchHelper;
@@ -28,6 +29,9 @@ import com.example.datecourserecommendapplication.RecycerView.ContentAdapter;
 import com.example.datecourserecommendapplication.Util.ContentItemTouchHelperCallback;
 import com.example.datecourserecommendapplication.Util.TimeCheck;
 import com.example.datecourserecommendapplication.ViewModel.MainViewModel;
+import com.google.android.material.chip.Chip;
+import com.google.android.material.chip.ChipGroup;
+import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 import com.google.firebase.Timestamp;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
@@ -36,13 +40,15 @@ import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.StorageException;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.UUID;
 
 public class WritePostActivity extends AppCompatActivity {
     private ActivityResultLauncher<Intent> pickImageLauncher;
     private FirebaseStorage storage;
-    private Button btnSave, btnAddCourse;
+    private Button btnSave, btnAddCourse, btnSelectInterests;
+    private ChipGroup chipGroupInterests;
     private ImageButton btnBack;
     private EditText editTitle;
     private MainViewModel viewModel;
@@ -52,7 +58,11 @@ public class WritePostActivity extends AppCompatActivity {
     private TimeCheck timeCheck;
     private ActivityResultLauncher<Intent> locationSearchLauncher;
     private Location selectedPlace;
+    private ArrayList<String> selectedInterests = new ArrayList<>();
     private int selectedItemIndex = -1;
+    private List<String> localUriList = new ArrayList<>(3);
+    private int localUriListIndex = 0;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState){
@@ -70,7 +80,14 @@ public class WritePostActivity extends AppCompatActivity {
         btnSave = findViewById(R.id.btnSave);
         btnAddCourse = findViewById(R.id.btnAddCourse);
         btnBack = findViewById(R.id.btn_back);
+        btnSelectInterests = findViewById(R.id.btnSelectInterests);
+
+        chipGroupInterests = findViewById(R.id.chipGroupInterests);
+
         editTitle = findViewById(R.id.editTitle);
+
+        //list 초기화
+        localUriList = new ArrayList<>(Arrays.asList(null, null, null));
 
         //get img intent data
         registerPickImageLauncher();
@@ -91,7 +108,9 @@ public class WritePostActivity extends AppCompatActivity {
                 }});
             }
             @Override
-            public void onSelectImageClick(int position) {
+            public void onSelectImageClick(int position, int localUriIndex, List<String> list) {
+                localUriListIndex = localUriIndex;
+                localUriList = new ArrayList<>(list); //item별 UriList 개인화 -> 무조건 adapter 객체 사용할때는 새 객체 참조
                 Log.d("ContentAdapter", "onSelectImageClick success");
                 selectedItemIndex = position;
                 openGalleryForItem(selectedItemIndex);
@@ -144,9 +163,34 @@ public class WritePostActivity extends AppCompatActivity {
             //preView 설정
             post.setPreviewText(contentList.get(0).getDescription());
 
+            //postInterests 설정
+            List<String> newInterests = new ArrayList<>(selectedInterests);
+            post.setPostInterests(newInterests);
+
+            //location filter query 위한 대표 region 설정 + post Core좌표 설정
+            for (Content content : contentList) {
+                if(content.getIsCore() == true){
+                    post.setCoreRegion(content.getLocation().getRegion1());
+
+                    post.setCoreLatitude(content.getLocation().getLatitude());
+                    post.setCoreLongitude(content.getLocation().getLongitude());
+
+                    Log.d("setCoreRegion", post.getCoreRegion());
+                    break;
+                }
+            }
+            if (post.getCoreRegion() == null){
+                post.setCoreRegion(contentList.get(0).getLocation().getRegion1());
+
+                post.setCoreLatitude(contentList.get(0).getLocation().getLatitude());
+                post.setCoreLongitude(contentList.get(0).getLocation().getLongitude());
+
+                Log.d("setCoreRegion", post.getCoreRegion());
+            }
+
             //post_thumbnail 설정
             if(contentList.get(0).getImageUrl() != null) {
-                post.setThumbnail(contentList.get(0).getImageUrl());
+                post.setThumbnail(contentList.get(0).getImageUrl().get(0));
             }else {
                 post.setThumbnail(null);
             }
@@ -185,10 +229,70 @@ public class WritePostActivity extends AppCompatActivity {
             Content newContent = new Content();
             newContent.setLocation(new Location()); //new Odject 생성 시 필드는 전부 null (int, boolean...etc 제외)
             newContent.setContentId(java.util.UUID.randomUUID().toString()); // 임시 ID 생성
+
+            //list 초기화
+            localUriList = new ArrayList<>(Arrays.asList(null, null, null));
+
+            List<String> imgList = new ArrayList<>(Arrays.asList(null, null, null));
+            newContent.setImageUrl(imgList);
+
             adapter.submitList(new ArrayList<Content>(adapter.getCurrentList()) {{
                 add(newContent);
             }});
         });
+
+        //select Interests button
+        btnSelectInterests.setOnClickListener(v->{
+            String[] interests = {"카페", "전시회", "산책", "드라이브", "공연", "음식", "영화", "야경", "실내", "기타"};
+            boolean[] checked = new boolean[interests.length];
+            //selectedInterests(현재 선택되어 있는 interests, chipList와 동일) -> 복제 List 생성
+            ArrayList<String> tempInterests = new ArrayList<>(selectedInterests);
+
+            for (int i = 0; i < checked.length; i++) {
+                checked[i] = selectedInterests.contains(interests[i]);
+            }
+            new MaterialAlertDialogBuilder(this)
+                    .setTitle("카테고리")
+                    .setMultiChoiceItems(interests, checked, (dialog, which, isChecked) -> {
+                        if(isChecked){
+                            if (tempInterests.size() >= 3){
+                                //선택 3개 초과 시 경고
+                                Toast.makeText(this, "최대 3개까지만 선택할 수 있습니다.", Toast.LENGTH_SHORT).show();
+                                checked[which] = false;
+                                //잠시 대기 후 버튼 취소 -> 내부 토글로 버튼 취소가 안 될 수 있기 때문
+                                ((AlertDialog)dialog).getListView().post(()
+                                        -> ((AlertDialog)dialog).getListView().setItemChecked(which, false));
+                            }else {
+                                tempInterests.add(interests[which]);
+                                checked[which] = true;
+                            }
+                        }else {
+                            tempInterests.remove(interests[which]);
+                            checked[which] = false;
+                        }
+                    })
+                    .setPositiveButton("확인", (dialog, which) ->{
+                        chipGroupInterests.removeAllViews();
+
+                        for (String interest : tempInterests) {
+                            Chip chip = new Chip(this);
+                            chip.setText(interest);
+                            chip.setCloseIconVisible(true);
+
+                            final String interestName = interest;
+
+                            chip.setOnCloseIconClickListener(v2 -> {
+                                chipGroupInterests.removeView(chip);
+                                selectedInterests.remove(interestName);
+                            });
+                            chipGroupInterests.addView(chip);
+                        }
+                        selectedInterests = tempInterests;
+                    })
+                    .setNegativeButton("취소", null)
+                    .show();
+        });
+
     }
 
     //locationLauncher setup : intent callback이라고 생각하면 편함. intent 속성, intent 후 callback data 처리
@@ -218,6 +322,8 @@ public class WritePostActivity extends AppCompatActivity {
         selectedPlace.setLatitude(lat);
         selectedPlace.setLongitude(lng);
         selectedPlace.setPlaceId(placeId);
+        selectedPlace.splitAddressIntoRegions();
+        Log.d("setLocationInfo", selectedPlace.getRegion1());
         Log.d("setLocationInfo", selectedPlace.toString());
         // UI에 표시 -> ContentList에 Location 추가하고 UI반영
         //-> DiffUtil에서 List뿐 아니라 인덱스 객체들도 새로운 객체여야 함. -> 다시 말해서 아예 새로운 객체, 인덱스 객체이여야 함
@@ -259,7 +365,17 @@ public class WritePostActivity extends AppCompatActivity {
                                                     for (Content c : adapter.getCurrentList()) {
                                                         newList.add(new Content(c)); // 깊은 복사
                                                     }
-                                                    newList.get(selectedItemIndex).setImageUrl(downloadUri.toString());
+
+                                                    localUriList.set(localUriListIndex, downloadUri.toString());
+
+                                                    List<String> newUriList = new ArrayList<>(localUriList);
+
+                                                    newList.get(selectedItemIndex).setImageUrl(newUriList);
+
+                                                    Log.d("DiffUtil", "old: " + adapter.getCurrentList().get(selectedItemIndex).getImageUrl());
+                                                    Log.d("DiffUtil", "localUriList == oldUriList ? " +
+                                                            (localUriList == adapter.getCurrentList().get(selectedItemIndex).getImageUrl()));
+
                                                     adapter.submitList(newList);
                                                 }).addOnFailureListener(e->{
                                                     Log.d("WritePostActivity", "uri 가져오기 실패" + e.getMessage());

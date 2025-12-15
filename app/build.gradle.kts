@@ -72,6 +72,7 @@ dependencies {
     implementation("com.google.firebase:firebase-analytics") //firebase
     implementation("com.google.firebase:firebase-firestore:25.0.0") //firestore
     implementation("com.google.firebase:firebase-storage") //firebase storage
+    implementation("com.google.firebase:firebase-functions")
 
     implementation("com.squareup.retrofit2:retrofit:3.0.0")
     implementation("com.squareup.retrofit2:converter-gson:3.0.0")
@@ -84,5 +85,9 @@ dependencies {
     //glide 라이브러리
     implementation ("com.github.bumptech.glide:glide:4.15.1")
     annotationProcessor ("com.github.bumptech.glide:compiler:4.15.1")
+
+    implementation("com.google.code.gson:gson:2.10.1")//json (Map 타입)-> Post 타입으로 바꾸기 위함
+
+    implementation("com.kakao.maps.open:android:2.13.0")//kakao Maps
 
 }

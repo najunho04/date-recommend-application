@@ -66,6 +66,8 @@ public class RetweetActivity extends AppCompatActivity {
     private Post originalPost;
     private List<Content> newContentList;
     private FirebaseStorage storage;
+    private List<String> localUriList = new ArrayList<>(3);
+    private int localUriListIndex = 0;
 
     @Override
     protected void onCreate(Bundle savedInstanceState){
@@ -109,7 +111,9 @@ public class RetweetActivity extends AppCompatActivity {
                 }});
             }
             @Override
-            public void onSelectImageClick(int position) {
+            public void onSelectImageClick(int position, int localUriIndex,  List<String> list) {
+                localUriListIndex = localUriIndex;
+                localUriList = list;
                 Log.d("ContentAdapter", "onSelectImageClick success");
                 selectedItemIndex = position;
                 openGalleryForItem(selectedItemIndex);
@@ -311,7 +315,9 @@ public class RetweetActivity extends AppCompatActivity {
                                                     for (Content c : contentAdapter.getCurrentList()) {
                                                         newList.add(new Content(c)); // 깊은 복사
                                                     }
-                                                    newList.get(selectedItemIndex).setImageUrl(downloadUri.toString());
+
+                                                    localUriList.set(localUriListIndex, downloadUri.toString());
+                                                    newList.get(selectedItemIndex).setImageUrl(localUriList);
                                                     contentAdapter.submitList(newList);
                                                 }).addOnFailureListener(e->{
                                                     Log.d("EditPostActivity", "uri 가져오기 실패" + e.getMessage());
