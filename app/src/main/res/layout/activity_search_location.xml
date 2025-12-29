@@ -5,17 +5,55 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-    <!-- Toolbar -->
-    <androidx.appcompat.widget.Toolbar
-        android:id="@+id/toolbar"
-        android:layout_width="0dp"
+    <com.google.android.material.appbar.AppBarLayout
+        android:id="@+id/appBarLayout"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="?attr/colorPrimary"
-        android:title="장소 선택"
-        app:titleTextColor="@android:color/white"
-        app:layout_constraintTop_toTopOf="parent"
+        android:background="@color/top_bar_bg"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"/>
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:elevation="0dp">
+
+        <androidx.appcompat.widget.Toolbar
+            android:id="@+id/toolbar"
+            android:layout_width="match_parent"
+            android:layout_height="?attr/actionBarSize"
+            app:contentInsetStart="0dp"
+            app:contentInsetEnd="0dp">
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:paddingHorizontal="16dp">
+
+                <ImageView
+                    android:id="@+id/iv_back"
+                    android:layout_width="24dp"
+                    android:layout_height="24dp"
+                    android:src="@drawable/app_icon_64px"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:layout_constraintBottom_toBottomOf="parent" />
+                <TextView
+                    android:id="@+id/tv_title"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:text="상세 페이지"
+                    android:textColor="@color/black"
+                    android:textSize="18sp"
+                    android:textStyle="bold"
+                    android:layout_marginStart="12dp"
+                    app:layout_constraintStart_toEndOf="@id/iv_back"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:layout_constraintBottom_toBottomOf="parent" />
+
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
+        </androidx.appcompat.widget.Toolbar>
+
+    </com.google.android.material.appbar.AppBarLayout>
 
     <!-- Search Bar -->
     <LinearLayout
@@ -23,58 +61,56 @@
         android:id="@+id/searchBar"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
+        android:gravity="center_vertical"
         android:padding="8dp"
-        app:layout_constraintTop_toBottomOf="@id/toolbar"
+        app:layout_constraintTop_toBottomOf="@id/appBarLayout"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent">
+
+        <ImageView
+            android:layout_width="32dp"
+            android:layout_height="32dp"
+            android:layout_marginEnd="4dp"
+            android:layout_marginStart="4dp"
+            android:layout_marginTop="4dp"
+            android:background="@drawable/app_icon_64px" />
 
         <com.google.android.material.textfield.TextInputLayout
             android:id="@+id/searchInputLayout"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:hint="식당 검색">
+            android:hint="데이트 장소 입력">
 
             <com.google.android.material.textfield.TextInputEditText
                 android:id="@+id/etSearch"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:background="@color/white"
                 android:imeOptions="actionSearch"/>
         </com.google.android.material.textfield.TextInputLayout>
 
         <Button
             android:id="@+id/btnSearch"
-            android:layout_width="wrap_content"
-            android:layout_height="match_parent"
-            android:text="검색"/>
+            app:backgroundTint="@null"
+            android:background="@drawable/bg_login_button"
+            android:layout_width="60dp"
+            android:layout_height="40dp"
+            android:layout_marginTop="4dp"
+            android:layout_marginStart="8dp"
+            android:text="검색"
+            android:textColor="@color/black"/>
     </LinearLayout>
-
-    <!-- MapView 영역 -->
-    <RelativeLayout
-        android:id="@+id/mapContainer"
-        android:layout_width="0dp"
-        android:layout_height="0dp"
-        app:layout_constraintTop_toBottomOf="@id/searchBar"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintBottom_toTopOf="@id/rv_place">
-
-        <!-- 수정중.. -->
-        <ImageView
-            android:id="@+id/mapView"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"/>
-    </RelativeLayout>
 
     <!-- 검색 결과 리스트 -->
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/rv_place"
         android:layout_width="0dp"
         android:layout_height="200dp"
-        app:layout_constraintBottom_toTopOf="@id/btnSelect"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/mapContainer"/>
+        app:layout_constraintTop_toBottomOf="@id/searchBar"
+        android:layout_marginTop="16dp"/>
 
     <!-- 하단 '이 장소 선택하기' 버튼 -->
     <com.google.android.material.button.MaterialButton
@@ -82,8 +118,9 @@
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:text="이 장소 선택하기"
-        android:backgroundTint="@color/teal_700"
-        android:textColor="@android:color/white"
+        app:backgroundTint="@null"
+        android:background="@drawable/bg_login_button"
+        android:textColor="@android:color/black"
         app:cornerRadius="12dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent"

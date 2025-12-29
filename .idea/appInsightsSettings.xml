@@ -3,13 +3,27 @@
   <component name="AppInsightsSettings">
     <option name="tabSettings">
       <map>
+        <entry key="Android Vitals">
+          <value>
+            <InsightsFilterSettings>
+              <option name="connection">
+                <ConnectionSetting>
+                  <option name="appId" value="com.najunho.datecourserecommendapplication" />
+                </ConnectionSetting>
+              </option>
+              <option name="signal" value="SIGNAL_UNSPECIFIED" />
+              <option name="timeIntervalDays" value="SEVEN_DAYS" />
+              <option name="visibilityType" value="ALL" />
+            </InsightsFilterSettings>
+          </value>
+        </entry>
         <entry key="Firebase Crashlytics">
           <value>
             <InsightsFilterSettings>
               <option name="connection">
                 <ConnectionSetting>
-                  <option name="appId" value="com.example.datecourserecommendapplication" />
-                  <option name="mobileSdkAppId" value="1:98935395735:android:29bbec8b8372a8e7fbe0d2" />
+                  <option name="appId" value="com.najunho.datecourserecommendapplication" />
+                  <option name="mobileSdkAppId" value="1:98935395735:android:18326b26ca1c210ffbe0d2" />
                   <option name="projectId" value="datecourserecommendationapp" />
                   <option name="projectNumber" value="98935395735" />
                 </ConnectionSetting>

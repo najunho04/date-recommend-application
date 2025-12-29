@@ -1,190 +1,219 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:layout_margin="8dp"
+    app:cardCornerRadius="16dp"
     app:cardElevation="4dp"
-    app:cardUseCompatPadding="true"
-    app:cardCornerRadius="16dp">
+    app:cardUseCompatPadding="true">
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:padding="8dp">
+        android:padding="12dp">
+
+        <!-- ================= 상단 버튼 ================= -->
+
+        <ImageButton
+            android:id="@+id/btnDelete"
+            android:layout_width="32dp"
+            android:layout_height="32dp"
+            android:clickable="true"
+            android:focusable="true"
+            android:background="?attr/selectableItemBackground"
+            android:src="@drawable/remove_32px"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            android:layout_marginTop="8dp"
+            android:layout_marginEnd="8dp"/>
 
         <ImageButton
             android:id="@+id/btnIsCore"
             android:layout_width="32dp"
             android:layout_height="32dp"
-            android:layout_marginTop="44dp"
-            android:layout_marginEnd="8dp"
-            android:background="?attr/selectableItemBackgroundBorderless"
-            android:src="@android:drawable/btn_star"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            app:tint="#D1D1D1" />
+            android:clickable="true"
+            android:focusable="true"
+            android:background="?attr/selectableItemBackground"
+            android:src="@drawable/is_core_32px"
+            android:layout_marginTop="8dp"
+            android:layout_marginEnd="12dp"
+            app:layout_constraintEnd_toStartOf="@+id/btnDelete"
+            app:layout_constraintTop_toTopOf="parent" />
 
-        <!-- 삭제 버튼 -->
-        <ImageButton
-            android:id="@+id/btnDelete"
-            android:layout_width="32dp"
-            android:layout_height="32dp"
-            android:background="?attr/selectableItemBackgroundBorderless"
-            android:src="@android:drawable/ic_menu_close_clear_cancel"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:tint="#FF4444" />
+        <!-- ================= 제목 ================= -->
 
-        <!-- 소제목 -->
         <EditText
             android:id="@+id/editTitle"
-            android:layout_width="wrap_content"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:hint="소제목 (예: 성수에서 점심 먹기)"
+            android:hint="소제목 (예 : ㅇㅇ역에서 데이트)"
             android:textSize="16sp"
-            android:padding="8dp"
-            android:background="@android:color/transparent"
+            android:textStyle="bold"
+            android:textColor="@color/black"
+            android:maxLines="2"
+            android:ellipsize="end"
+            android:layout_marginEnd="56dp"
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintEnd_toStartOf="@id/btnDelete"
-            app:layout_constraintHorizontal_bias="0" />
+            app:layout_constraintEnd_toStartOf="@id/btnDelete" />
 
-        <!-- 시작 시간 -->
+        <!-- ================= 시간 ================= -->
+
         <TextView
             android:id="@+id/tvStartTimeLabel"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="시작"
-            android:textColor="#555555"
             android:textSize="14sp"
+            android:textStyle="bold"
+            android:textColor="@color/black"
+            android:layout_marginTop="12dp"
             app:layout_constraintTop_toBottomOf="@id/editTitle"
-            app:layout_constraintStart_toStartOf="parent"
-            android:layout_marginTop="12dp" />
+            app:layout_constraintStart_toStartOf="parent" />
 
         <EditText
             android:id="@+id/tvStartTime"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="8dp"
-            android:background="#FFFFFF"
-            android:clickable="true"
-            android:focusable="true"
-            android:padding="6dp"
+            android:padding="4dp"
             android:hint="00:00"
-            android:textColor="#000000"
+            android:layout_marginTop="8dp"
             android:textSize="14sp"
-            app:layout_constraintBottom_toTopOf="@+id/tvLocation"
+            android:background="#FFFFFF"
             app:layout_constraintStart_toEndOf="@id/tvStartTimeLabel"
-            app:layout_constraintTop_toBottomOf="@+id/editTitle" />
+            app:layout_constraintTop_toBottomOf="@id/editTitle" />
 
-        <!-- 종료 시간 -->
         <TextView
             android:id="@+id/tvEndTimeLabel"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginStart="32dp"
+            android:layout_marginStart="24dp"
             android:text="종료"
-            android:textColor="#555555"
             android:textSize="14sp"
-            app:layout_constraintBottom_toTopOf="@+id/tvLocation"
+            android:textStyle="bold"
+            android:textColor="@color/black"
+            android:layout_marginTop="12dp"
             app:layout_constraintStart_toEndOf="@id/tvStartTime"
-            app:layout_constraintTop_toBottomOf="@id/editTitle" />
+            app:layout_constraintTop_toBottomOf="@id/editTitle"/>
 
         <EditText
             android:id="@+id/tvEndTime"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="8dp"
-            android:background="#FFFFFF"
-            android:clickable="true"
-            android:focusable="true"
-            android:padding="6dp"
+            android:padding="4dp"
+            android:layout_marginTop="8dp"
             android:hint="00:00"
-            android:textColor="#000000"
             android:textSize="14sp"
-            app:layout_constraintBottom_toTopOf="@+id/tvLocation"
+            android:background="#FFFFFF"
             app:layout_constraintStart_toEndOf="@id/tvEndTimeLabel"
             app:layout_constraintTop_toBottomOf="@id/editTitle" />
 
-        <!-- 장소 -->
+        <!-- ================= 장소 ================= -->
+
         <TextView
             android:id="@+id/tvLocation"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:hint="장소 입력 (예: 성수 OOO식당)"
-            android:textSize="15sp"
             android:layout_marginTop="12dp"
+            android:hint="장소 입력 (예: 성수 OOO식당)"
+            android:textSize="14sp"
             android:background="@android:color/transparent"
             app:layout_constraintTop_toBottomOf="@id/tvStartTimeLabel"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toEndOf="parent" />
 
-        <LinearLayout
+        <!-- ================= 이미지 영역 ================= -->
+
+        <androidx.constraintlayout.widget.ConstraintLayout
             android:id="@+id/imgLayout"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            app:layout_constraintEnd_toEndOf="parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="12dp"
+            app:layout_constraintTop_toBottomOf="@id/tvLocation"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/tvLocation"
-            android:layout_margin="4dp"
-            android:orientation="horizontal"
-            android:gravity="center">
+            app:layout_constraintEnd_toEndOf="parent">
 
-            <!-- 이미지 -->
             <ImageButton
                 android:id="@+id/imgBackBtn"
                 android:layout_width="40dp"
                 android:layout_height="40dp"
-                android:layout_marginStart="4dp"
                 android:backgroundTint="#FFFFFF"
-                android:textColor="#000000"
-                android:src="@android:drawable/ic_media_rew"/>
+                android:background="?attr/selectableItemBackground"
+                android:src="@android:drawable/ic_media_rew"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="@id/imgPreview"
+                app:layout_constraintBottom_toBottomOf="@id/imgPreview" />
 
             <ImageView
                 android:id="@+id/imgPreview"
-                android:layout_width="240dp"
-                android:layout_height="180dp"
-                android:scaleType="centerCrop"
+                android:layout_width="0dp"
+                android:layout_height="0dp"
+                android:layout_marginHorizontal="8dp"
                 android:background="#DDDDDD"
-                android:layout_marginStart="8dp"
-                android:layout_marginEnd="8dp" />
+                android:scaleType="centerCrop"
+                app:layout_constraintStart_toEndOf="@id/imgBackBtn"
+                app:layout_constraintEnd_toStartOf="@id/imgFrontBtn"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintDimensionRatio="4:3" />
+
+            <!-- 로딩 아이콘 -->
+            <ImageView
+                android:id="@+id/imgLoading"
+                android:layout_width="80dp"
+                android:layout_height="80dp"
+                android:layout_gravity="center"
+                android:src="@drawable/load_128px"
+                android:visibility="gone"
+                app:layout_constraintBottom_toBottomOf="@+id/imgPreview"
+                app:layout_constraintEnd_toStartOf="@id/imgFrontBtn"
+                app:layout_constraintStart_toEndOf="@id/imgBackBtn"
+                app:layout_constraintTop_toTopOf="parent" />
 
             <ImageButton
                 android:id="@+id/imgFrontBtn"
                 android:layout_width="40dp"
                 android:layout_height="40dp"
                 android:backgroundTint="#FFFFFF"
-                android:textColor="#000000"
-                android:src="@android:drawable/ic_media_ff"/>
-        </LinearLayout>
+                android:background="?attr/selectableItemBackground"
+                android:src="@android:drawable/ic_media_ff"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toTopOf="@id/imgPreview"
+                app:layout_constraintBottom_toBottomOf="@id/imgPreview" />
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+        <!-- ================= 이미지 선택 ================= -->
 
         <Button
             android:id="@+id/btnSelectImage"
-            android:layout_width="match_parent"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="8dp"
-            android:layout_marginStart="64dp"
-            android:layout_marginEnd="64dp"
             android:text="이미지 선택"
-            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/imgLayout"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/imgLayout" />
+            app:layout_constraintEnd_toEndOf="parent" />
 
-        <!-- 설명 -->
+        <!-- ================= 설명 ================= -->
+
         <EditText
             android:id="@+id/editDescription"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
+            android:layout_marginTop="12dp"
             android:minHeight="80dp"
             android:gravity="top"
             android:hint="부가 설명"
             android:textSize="15sp"
+            android:textColor="@color/black"
             android:background="@android:color/transparent"
-            android:layout_marginTop="12dp"
             app:layout_constraintTop_toBottomOf="@id/btnSelectImage"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"/>
+            app:layout_constraintEnd_toEndOf="parent" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 

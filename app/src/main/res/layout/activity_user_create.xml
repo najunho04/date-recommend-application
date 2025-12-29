@@ -3,129 +3,220 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:padding="24dp"
+    android:fillViewport="true"
     android:background="#FFFFFF">
 
-    <LinearLayout
+    <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="vertical"
-        android:gravity="center_horizontal">
+        android:layout_height="wrap_content">
 
-        <!-- 🔹 상단 로고 + 제목 -->
-        <ImageView
-            android:id="@+id/appLogo"
-            android:layout_width="80dp"
-            android:layout_height="80dp"
-            android:src="@drawable/app_logo_color_64px"
-            android:contentDescription="App Logo"
-            android:layout_marginBottom="12dp" />
+        <!-- ================= 상단 헤더 ================= -->
+
+        <LinearLayout
+            android:id="@+id/topBar"
+            android:layout_width="0dp"
+            android:layout_height="140dp"
+            android:orientation="vertical"
+            android:gravity="center"
+            android:background="@drawable/bg_top_bar"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent">
+
+            <ImageView
+                android:layout_width="64dp"
+                android:layout_height="64dp"
+                android:src="@drawable/app_icon_64px"
+                android:contentDescription="app icon"/>
+
+            <TextView
+                android:layout_marginTop="12dp"
+                android:text="프로필 설정"
+                android:textSize="18sp"
+                android:textStyle="bold"
+                android:textColor="#000000"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"/>
+        </LinearLayout>
+
+        <!-- ================= 닉네임 ================= -->
 
         <TextView
+            android:id="@+id/tvNickname"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="프로필 설정"
-            android:textSize="22sp"
+            android:text="닉네임"
             android:textStyle="bold"
-            android:textColor="@android:color/black"
-            android:layout_marginBottom="24dp" />
+            android:layout_marginTop="24dp"
+            android:textColor="#000000"
+            app:layout_constraintTop_toBottomOf="@id/topBar"
+            app:layout_constraintStart_toStartOf="parent"
+            android:layout_marginStart="24dp"/>
 
-        <!-- 🔸 1. 닉네임 -->
-        <com.google.android.material.textfield.TextInputLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+        <EditText
+            android:id="@+id/editNickName"
+            android:layout_width="0dp"
+            android:layout_height="40dp"
             android:hint="닉네임 입력"
-            app:boxStrokeColor="@color/black">
+            android:textSize="14sp"
+            android:background="@drawable/bg_input_pink"
+            android:paddingStart="16dp"
+            android:paddingEnd="8dp"
+            android:layout_marginTop="8dp"
+            app:layout_constraintTop_toBottomOf="@id/tvNickname"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            android:layout_marginStart="32dp"
+            android:layout_marginEnd="80dp"/>
 
-            <com.google.android.material.textfield.TextInputEditText
-                android:id="@+id/editNickName"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:inputType="textPersonName" />
-        </com.google.android.material.textfield.TextInputLayout>
+        <!-- ================= 지역 ================= -->
 
-        <!-- 🔸 2. 지역 선택 -->
         <TextView
-            android:layout_width="match_parent"
+            android:id="@+id/tvLocation"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="지역 선택"
+            android:text="지역"
             android:textStyle="bold"
-            android:layout_marginTop="16dp" />
+            android:textColor="#000000"
+            android:layout_marginTop="20dp"
+            app:layout_constraintTop_toBottomOf="@id/editNickName"
+            app:layout_constraintStart_toStartOf="parent"
+            android:layout_marginStart="24dp"/>
 
-        <Button
+        <!-- ================= 나이 ================= -->
+
+        <TextView
             android:id="@+id/btnSelectLocation"
-            android:layout_width="match_parent"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_marginStart="24dp"
+            android:layout_marginTop="8dp"
+            android:background="@drawable/bg_button_pink"
+            app:backgroundTint="@null"
+            android:padding="8dp"
             android:text="지역 선택하기"
-            android:backgroundTint="@color/white"
-            android:textColor="@color/black"/>
+            android:textSize="12sp"
+            android:textColor="@color/black"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/tvLocation" />
 
-        <!-- 🔸 3. 나이 입력 -->
-        <com.google.android.material.textfield.TextInputLayout
-            android:layout_width="match_parent"
+        <TextView
+            android:id="@+id/tvAge"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:text="나이"
+            android:textStyle="bold"
+            android:textColor="#000000"
+            android:layout_marginTop="20dp"
+            app:layout_constraintTop_toBottomOf="@id/btnSelectLocation"
+            app:layout_constraintStart_toStartOf="parent"
+            android:layout_marginStart="24dp"/>
+
+        <EditText
+            android:id="@+id/editAge"
+            android:layout_width="0dp"
+            android:layout_height="40dp"
             android:hint="나이 입력"
-            android:layout_marginTop="16dp">
+            android:textSize="14sp"
+            android:inputType="number"
+            android:background="@drawable/bg_input_pink"
+            android:paddingStart="16dp"
+            android:paddingEnd="16dp"
+            android:layout_marginTop="8dp"
+            app:layout_constraintTop_toBottomOf="@id/tvAge"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            android:layout_marginStart="32dp"
+            android:layout_marginEnd="80dp"/>
 
-            <com.google.android.material.textfield.TextInputEditText
-                android:id="@+id/editAge"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:inputType="number" />
-        </com.google.android.material.textfield.TextInputLayout>
+        <!-- ================= 성별 ================= -->
 
-        <!-- 🔸 4. 성별 선택 -->
         <TextView
-            android:layout_width="match_parent"
+            android:id="@+id/tvGender"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="성별 선택"
+            android:text="성별"
             android:textStyle="bold"
-            android:layout_marginTop="16dp" />
+            android:textColor="#000000"
+            android:layout_marginTop="20dp"
+            app:layout_constraintTop_toBottomOf="@id/editAge"
+            app:layout_constraintStart_toStartOf="parent"
+            android:layout_marginStart="24dp"/>
 
-        <Button
+        <!-- ================= 카테고리 ================= -->
+
+        <TextView
             android:id="@+id/btnSelectGender"
-            android:layout_width="match_parent"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_marginStart="32dp"
+            android:layout_marginTop="8dp"
+            android:background="@drawable/bg_button_pink"
+            android:backgroundTint="@null"
+            android:padding="8dp"
             android:text="성별 선택하기"
-            android:backgroundTint="@color/white"
-            android:textColor="@color/black"/>
+            android:textColor="@color/black"
+            android:textSize="12sp"
+            app:backgroundTint="@null"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/tvGender" />
 
-        <!-- 🔸 5. 흥미 카테고리 선택 -->
         <TextView
-            android:layout_width="match_parent"
+            android:id="@+id/tvCategory"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="흥미 카테고리 선택"
+            android:text="카테고리"
             android:textStyle="bold"
-            android:layout_marginTop="16dp" />
+            android:textColor="#000000"
+            android:layout_marginTop="20dp"
+            app:layout_constraintTop_toBottomOf="@id/btnSelectGender"
+            app:layout_constraintStart_toStartOf="parent"
+            android:layout_marginStart="24dp"/>
 
-        <Button
+        <TextView
             android:id="@+id/btnSelectInterests"
-            android:layout_width="match_parent"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="카테고리 선택하기"
-            android:backgroundTint="@color/white"
-            android:textColor="@color/black"/>
+            android:text="카테고리 선택"
+            android:textSize="12sp"
+            android:textColor="@color/black"
+            app:backgroundTint="@null"
+            android:background="@drawable/bg_button_pink"
+            android:backgroundTint="@null"
+            android:layout_marginTop="8dp"
+            android:padding="8dp"
+            app:layout_constraintTop_toBottomOf="@id/tvCategory"
+            app:layout_constraintStart_toStartOf="parent"
+            android:layout_marginStart="32dp"/>
 
-        <!-- 선택된 흥미 표시용 ChipGroup -->
         <com.google.android.material.chip.ChipGroup
             android:id="@+id/chipGroupInterests"
-            android:layout_width="match_parent"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginTop="8dp"
+            app:layout_constraintTop_toBottomOf="@id/btnSelectInterests"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            android:layout_marginStart="24dp"
+            android:layout_marginEnd="24dp"
             app:singleLine="false"
-            app:singleSelection="false"
-            app:chipSpacing="8dp" />
+            app:chipSpacing="8dp"/>
 
-        <!-- 🔹 저장 버튼 -->
+        <!-- ================= 저장 버튼 ================= -->
+
         <Button
             android:id="@+id/btnSaveUser"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_width="160dp"
+            android:layout_height="40dp"
             android:text="저장하기"
             android:textColor="@color/black"
-            android:backgroundTint="@color/white"
-            android:layout_marginTop="28dp"
-            android:layout_marginBottom="24dp" />
+            app:backgroundTint="@null"
+            android:background="@drawable/bg_button_pink"
+            android:layout_marginTop="32dp"
+            android:layout_marginBottom="32dp"
+            app:layout_constraintTop_toBottomOf="@id/chipGroupInterests"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"/>
 
-    </LinearLayout>
+    </androidx.constraintlayout.widget.ConstraintLayout>
 </ScrollView>

@@ -13,7 +13,7 @@
         android:layout_height="wrap_content"
         android:orientation="horizontal"
         android:padding="12dp"
-        android:background="#FFFFFF"
+        android:background="@drawable/bg_top_bar"
         android:elevation="6dp"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -23,7 +23,7 @@
         <EditText
             android:id="@+id/etSearchKeyword"
             android:layout_width="0dp"
-            android:layout_height="40dp"
+            android:layout_height="48dp"
             android:layout_weight="1"
             android:paddingStart="12dp"
             android:paddingEnd="12dp"
@@ -34,7 +34,10 @@
             android:id="@+id/btnSearch"
             android:layout_width="40dp"
             android:layout_height="40dp"
+            android:clickable="true"
+            android:focusable="true"
             android:padding="8dp"
+            android:background="?attr/selectableItemBackgroundBorderless"
             android:src="?android:attr/actionModeWebSearchDrawable"
             android:contentDescription="search" />
     </LinearLayout>
@@ -45,72 +48,116 @@
         android:layout_width="0dp"
         android:layout_height="0dp"
         app:layout_constraintTop_toBottomOf="@+id/searchContainer"
-        app:layout_constraintBottom_toTopOf="@+id/navigationLayout"
+        app:layout_constraintBottom_toTopOf="@+id/bottomBar"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"/>
 
-    <!-- 현위치 버튼(FAB 스타일) -->
     <ImageButton
         android:id="@+id/btnMyLocation"
-        android:layout_width="48dp"
-        android:layout_height="48dp"
-        android:src="@android:drawable/ic_menu_mylocation"
-        android:elevation="10dp"
-        android:padding="10dp"
-        app:layout_constraintBottom_toTopOf="@+id/navigationLayout"
-        app:layout_constraintEnd_toEndOf="parent"
-        android:layout_marginEnd="16dp"
-        android:layout_marginBottom="16dp"
-        android:background="@color/white"
-        android:contentDescription="my_location" />
+        android:layout_width="64dp"
+        android:layout_height="64dp"
+        android:clickable="true"
+        android:focusable="true"
+        android:background="?attr/selectableItemBackgroundBorderless"
+        android:src="@drawable/my_location_64px"
+        android:layout_marginEnd="32dp"
+        android:layout_marginBottom="32dp"
+        app:layout_constraintBottom_toBottomOf="@+id/mapView"
+        app:layout_constraintEnd_toEndOf="parent" />
 
-    <!-- 하단 네비 버튼 영역 (네가 준 코드 그대로) -->
+    <!-- ================= 하단 버튼 바 ================= -->
     <LinearLayout
-        android:id="@+id/navigationLayout"
+        android:id="@+id/bottomBar"
         android:layout_width="0dp"
-        android:layout_height="wrap_content"
+        android:layout_height="80dp"
         android:orientation="horizontal"
+        android:background="@drawable/bg_bottom_bar"
         android:gravity="center"
-        android:padding="12dp"
-        android:background="#FFFFFF"
+        android:padding="8dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent">
 
-        <Button
-            android:id="@+id/btnMainFeed"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
+        <LinearLayout
             android:layout_weight="1"
-            android:text="메인 화면"
-            android:backgroundTint="#1976D2"
-            android:textColor="#FFFFFF"/>
-
-        <View
-            android:layout_width="8dp"
-            android:layout_height="0dp" />
-
-        <Button
-            android:id="@+id/btnViewMap"
+            android:gravity="center"
+            android:orientation="vertical"
             android:layout_width="0dp"
-            android:layout_height="wrap_content"
+            android:layout_height="wrap_content">
+
+            <ImageButton
+                android:layout_width="32dp"
+                android:layout_height="32dp"
+                android:id="@+id/btnViewMap"
+                android:clickable="true"
+                android:focusable="true"
+                android:background="?attr/selectableItemBackgroundBorderless"
+                android:src="@drawable/search_icon_32px"/>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="지도 검색"
+                android:textStyle="bold"
+                android:textColor="#000000"
+                android:textSize="12sp"
+                android:layout_marginTop="4dp"
+                />
+        </LinearLayout>
+
+        <LinearLayout
             android:layout_weight="1"
-            android:text="지도 검색"
-            android:backgroundTint="#1976D2"
-            android:textColor="#FFFFFF"/>
-
-        <View
-            android:layout_width="8dp"
-            android:layout_height="0dp" />
-
-        <Button
-            android:id="@+id/btnUserInfo"
+            android:gravity="center"
+            android:orientation="vertical"
             android:layout_width="0dp"
-            android:layout_height="wrap_content"
+            android:layout_height="wrap_content">
+
+            <ImageButton
+                android:layout_width="32dp"
+                android:layout_height="32dp"
+                android:id="@+id/btnMainFeed"
+                android:clickable="true"
+                android:focusable="true"
+                android:background="?attr/selectableItemBackgroundBorderless"
+                android:src="@drawable/home_icon_32px"/>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="메인화면"
+                android:textStyle="bold"
+                android:textColor="#000000"
+                android:textSize="12sp"
+                android:layout_marginTop="4dp"
+                />
+        </LinearLayout>
+
+        <LinearLayout
             android:layout_weight="1"
-            android:text="유저 정보"
-            android:backgroundTint="#424242"
-            android:textColor="#FFFFFF"/>
+            android:gravity="center"
+            android:orientation="vertical"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content">
+
+            <ImageButton
+                android:layout_width="32dp"
+                android:layout_height="32dp"
+                android:id="@+id/btnUserInfo"
+                android:clickable="true"
+                android:focusable="true"
+                android:background="?attr/selectableItemBackgroundBorderless"
+                android:src="@drawable/user_icon_32px"/>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="마이 페이지"
+                android:textStyle="bold"
+                android:textColor="#000000"
+                android:textSize="12sp"
+                android:layout_marginTop="4dp"
+                />
+        </LinearLayout>
     </LinearLayout>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

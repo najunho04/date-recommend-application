@@ -30,7 +30,7 @@
                 android:id="@+id/commentAuthorImage"
                 android:layout_width="36dp"
                 android:layout_height="36dp"
-                android:src="@drawable/ic_launcher_foreground"
+                android:src="@drawable/app_icon_64px"
                 android:scaleType="centerCrop"
                 android:contentDescription="작성자 이미지"
                 android:layout_marginEnd="8dp" />
@@ -41,25 +41,34 @@
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:text="홍길동"
+                android:textColor="@color/black"
                 android:textStyle="bold"
-                android:textSize="14sp"
-                android:textColor="?attr/colorOnSurface" />
+                android:textSize="14sp" />
 
-            <Button
+            <TextView
                 android:id="@+id/btnEdit"
-                android:layout_width="62dp"
-                android:layout_height="40dp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:paddingVertical="4dp"
+                android:paddingHorizontal="12dp"
                 android:text="수정"
-                android:backgroundTint="#FFFDFD"
+                android:clickable="true"
+                android:focusable="true"
+                android:background="@drawable/bg_rounded_white_button"
                 android:textColor="#000000"
+                android:layout_marginEnd="4dp"
                 />
 
-            <Button
+            <TextView
                 android:id="@+id/btnDelete"
-                android:layout_width="62dp"
-                android:layout_height="40dp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:paddingVertical="4dp"
+                android:paddingHorizontal="12dp"
                 android:text="삭제"
-                android:backgroundTint="#FFFDFD"
+                android:clickable="true"
+                android:focusable="true"
+                android:background="@drawable/bg_rounded_white_button"
                 android:textColor="#000000"
                 />
         </LinearLayout>
@@ -70,9 +79,8 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="정말 좋은 코스네요! 다음에 가봐야겠어요 😊"
-            android:textAppearance="@style/TextAppearance.Material3.BodyMedium"
+            android:textColor="@color/black"
             android:lineSpacingExtra="2dp"
-            android:textColor="?attr/colorOnSurface"
             android:paddingBottom="6dp"
             android:visibility="visible" />
 

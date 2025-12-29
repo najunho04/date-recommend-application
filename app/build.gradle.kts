@@ -7,7 +7,7 @@ plugins {
 }
 
 android {
-    namespace = "com.example.datecourserecommendapplication"
+    namespace = "com.najunho.datecourserecommendapplication"
     compileSdk = 36
 
     buildFeatures {
@@ -15,11 +15,11 @@ android {
     }
 
     defaultConfig {
-        applicationId = "com.example.datecourserecommendapplication"
+        applicationId = "com.najunho.datecourserecommendapplication"
         minSdk = 24
         targetSdk = 36
-        versionCode = 1
-        versionName = "1.0"
+        versionCode = 3
+        versionName = "1.0.2"
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
     }
@@ -55,6 +55,7 @@ dependencies {
     implementation(libs.androidx.appcompat)
     implementation(libs.androidx.cardview)
     implementation(libs.googleid)
+    implementation(libs.androidx.camera.camera2.pipe)
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)
@@ -90,4 +91,5 @@ dependencies {
 
     implementation("com.kakao.maps.open:android:2.13.0")//kakao Maps
 
+    implementation("com.android.billingclient:billing-ktx:7.0.0") //결제 로직
 }

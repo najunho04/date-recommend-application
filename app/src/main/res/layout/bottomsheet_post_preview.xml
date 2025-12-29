@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:orientation="vertical"
     android:padding="20dp"
     android:background="@android:color/white"
@@ -17,6 +18,7 @@
         android:id="@+id/preview_title"
         android:textSize="18sp"
         android:textStyle="bold"
+        android:textColor="@color/black"
         android:text="preview_title"
         android:layout_gravity="center_horizontal"
         android:layout_marginTop="10dp"
@@ -84,9 +86,12 @@
         <Button
             android:id="@+id/btn_yes"
             android:layout_width="0dp"
-            android:layout_height="wrap_content"
+            android:layout_height="40dp"
             android:layout_weight="1"
-            android:text="예"/>
+            app:backgroundTint="@null"
+            android:background="@drawable/bg_login_button"
+            android:text="예"
+            android:textColor="@color/black"/>
 
         <View
             android:layout_width="10dp"
@@ -95,9 +100,12 @@
         <Button
             android:id="@+id/btn_no"
             android:layout_width="0dp"
-            android:layout_height="wrap_content"
+            android:layout_height="40dp"
             android:layout_weight="1"
-            android:text="아니오"/>
+            app:backgroundTint="@null"
+            android:background="@drawable/bg_login_button"
+            android:text="아니오"
+            android:textColor="@color/black"/>
 
     </LinearLayout>
 

@@ -2,197 +2,281 @@
 <androidx.constraintlayout.widget.ConstraintLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/userSetupLayout"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#FFFFFF"
-    tools:context=".Activity.User.UserSetUpActivity">
+    android:background="#FFFFFF">
 
-    <!-- 🔹 상단 로고 + 제목 -->
+    <!-- ================= 상단 바 ================= -->
     <LinearLayout
-        android:id="@+id/headerLayout"
+        android:id="@+id/topBar"
         android:layout_width="0dp"
-        android:layout_height="wrap_content"
+        android:layout_height="80dp"
         android:orientation="horizontal"
         android:gravity="center_vertical"
-        android:padding="16dp"
+        android:paddingStart="20dp"
+        android:background="@drawable/bg_top_bar"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent">
 
         <ImageView
-            android:id="@+id/imgLogo"
-            android:layout_width="40dp"
-            android:layout_height="40dp"
-            android:src="@drawable/app_logo_color"
-            android:contentDescription="App Logo"
-            android:layout_marginEnd="8dp" />
+            android:layout_width="28dp"
+            android:layout_height="28dp"
+            android:src="@drawable/app_icon_64px"
+            android:contentDescription="app logo"/>
 
         <TextView
-            android:id="@+id/tvAppTitle"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="DateRecommendationApp"
+            android:layout_marginStart="12dp"
+            android:text="My Page"
             android:textSize="18sp"
             android:textStyle="bold"
-            android:textColor="#333333" />
-    </LinearLayout>
-
-    <!-- 🔹 유저 프로필 영역 -->
-    <LinearLayout
-        android:id="@+id/profileLayout"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        android:paddingHorizontal="16dp"
-        android:paddingVertical="12dp"
-        android:gravity="center_vertical"
-        app:layout_constraintTop_toBottomOf="@id/headerLayout"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent">
-
-        <ImageView
-            android:id="@+id/imgProfile"
-            android:layout_width="72dp"
-            android:layout_height="72dp"
-            android:src="@drawable/ic_launcher_foreground"
-            android:contentDescription="User Profile Image"
-            android:background="@drawable/profile_border"
-            android:scaleType="centerCrop"
-            android:layout_marginEnd="12dp"/>
-
-        <TextView
-            android:id="@+id/tvNickname"
+            android:textColor="#000000"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="닉네임 예시"
-            android:textSize="18sp"
-            android:textStyle="bold"
-            android:textColor="#898686" />
+            android:layout_height="wrap_content"/>
     </LinearLayout>
 
-    <!-- 🔹 기능 버튼 리스트 (스크롤 가능) -->
+    <!-- ================= 스크롤 영역 ================= -->
     <ScrollView
-        android:id="@+id/scrollMenu"
+        android:id="@+id/scrollArea"
         android:layout_width="0dp"
         android:layout_height="0dp"
-        android:fillViewport="true"
-        app:layout_constraintTop_toBottomOf="@id/profileLayout"
-        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/topBar"
+        app:layout_constraintBottom_toTopOf="@id/bottomBar"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        android:layout_marginBottom="100dp"
-        >
+        app:layout_constraintEnd_toEndOf="parent">
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical"
-            android:padding="16dp"
-            android:divider="?android:attr/dividerHorizontal"
-            android:showDividers="middle">
+            android:padding="20dp">
 
-            <Button
-                android:id="@+id/btnChangeNickname"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="닉네임 변경"
-                android:backgroundTint="#FFFFFF"
+            <!-- 저장 -->
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="24dp"
+                android:text="저장"
+                android:textStyle="bold"
+                android:textSize="14sp"
                 android:textColor="#000000"/>
 
-            <Button
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
                 android:id="@+id/btnMyPosts"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
+                android:clickable="true"
+                android:focusable="true"
                 android:text="내 게시물 보기"
-                android:layout_marginTop="8dp"
-                android:backgroundTint="#FFFFFF"
-                android:textColor="#000000"/>
+                style="@style/FlatButton"
+                android:layout_marginStart="16dp"/>
 
-            <Button
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="48dp"
                 android:id="@+id/btnMyLikes"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="내 좋아요 보기"
-                android:layout_marginTop="8dp"
-                android:backgroundTint="#FFFFFF"
+                android:clickable="true"
+                android:focusable="true"
+                android:text="좋아요 게시물 보기"
+                style="@style/FlatButton"
+                android:layout_marginStart="16dp"/>
+
+            <!-- 정보 수정 -->
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="24dp"
+                android:layout_marginTop="24dp"
+                android:text="정보 수정"
+                android:textStyle="bold"
+                android:textSize="14sp"
                 android:textColor="#000000"/>
 
-            <Button
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="48dp"
                 android:id="@+id/btnMyInfo"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="내 정보 수정"
-                android:layout_marginTop="8dp"
-                android:backgroundTint="#FFFFFF"
-                android:textColor="#000000"/>
+                android:clickable="true"
+                android:focusable="true"
+                android:text="내 프로필 수정"
+                style="@style/FlatButton"
+                android:layout_marginStart="16dp"/>
 
-            <Button
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="48dp"
+                android:id="@+id/btnChangeNickname"
+                android:clickable="true"
+                android:focusable="true"
+                android:text="닉네임 변경"
+                style="@style/FlatButton"
+                android:layout_marginStart="16dp"/>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="48dp"
                 android:id="@+id/btnLogout"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
+                android:clickable="true"
+                android:focusable="true"
                 android:text="로그아웃"
-                android:layout_marginTop="8dp"
-                android:backgroundTint="#FFFFFF"
+                style="@style/FlatButton"
+                android:layout_marginStart="16dp"/>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="48dp"
+                android:id="@+id/btnWithdraw"
+                android:clickable="true"
+                android:focusable="true"
+                android:text="회원 탈퇴"
+                style="@style/FlatButton"
+                android:layout_marginStart="16dp"/>
+
+            <!-- 결제 -->
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="24dp"
+                android:layout_marginTop="24dp"
+                android:text="결제"
+                android:textStyle="bold"
+                android:textSize="14sp"
                 android:textColor="#000000"/>
 
-            <Button
-                android:id="@+id/btnWithdraw"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="탈퇴"
-                android:layout_marginTop="8dp"
-                android:backgroundTint="#FFFFFF"
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="48dp"
+                android:id="@+id/btn_buy_point"
+                android:clickable="true"
+                android:focusable="true"
+                android:text="포인트 구매"
+                style="@style/FlatButton"
+                android:layout_marginStart="16dp"/>
+
+            <!-- 문의 사항 -->
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="24dp"
+                android:layout_marginTop="24dp"
+                android:text="문의 사항"
+                android:textStyle="bold"
+                android:textSize="14sp"
                 android:textColor="#000000"/>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="48dp"
+                android:text="버그 문의"
+                style="@style/FlatButton"
+                android:layout_marginStart="16dp"/>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="48dp"
+                android:text="결제 문의"
+                style="@style/FlatButton"
+                android:layout_marginStart="16dp"/>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="48dp"
+                android:text="광고 문의"
+                style="@style/FlatButton"
+                android:layout_marginStart="16dp"/>
+
         </LinearLayout>
     </ScrollView>
 
+    <!-- ================= 하단 버튼 바 ================= -->
     <LinearLayout
-        android:id="@+id/navigationLayout"
+        android:id="@+id/bottomBar"
         android:layout_width="0dp"
-        android:layout_height="wrap_content"
+        android:layout_height="80dp"
         android:orientation="horizontal"
+        android:background="@drawable/bg_bottom_bar"
         android:gravity="center"
-        android:padding="12dp"
+        android:padding="8dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent">
 
-        <Button
-            android:id="@+id/btnMainFeed"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
+        <LinearLayout
             android:layout_weight="1"
-            android:text="메인 화면"
-            android:backgroundTint="#1976D2"
-            android:textColor="#FFFFFF"/>
-
-        <View
-            android:layout_width="8dp"
-            android:layout_height="0dp" />
-
-        <Button
-            android:id="@+id/btnViewMap"
+            android:gravity="center"
+            android:orientation="vertical"
             android:layout_width="0dp"
-            android:layout_height="wrap_content"
+            android:layout_height="wrap_content">
+
+            <ImageButton
+                android:id="@+id/btnViewMap"
+                android:layout_width="32dp"
+                android:layout_height="32dp"
+                android:clickable="true"
+                android:focusable="true"
+                android:background="?attr/selectableItemBackgroundBorderless"
+                android:src="@drawable/search_icon_32px"/>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="지도 검색"
+                android:textStyle="bold"
+                android:textColor="#000000"
+                android:textSize="12sp"
+                android:layout_marginTop="4dp"
+                />
+        </LinearLayout>
+
+        <LinearLayout
             android:layout_weight="1"
-            android:text="지도 검색"
-            android:backgroundTint="#1976D2"
-            android:textColor="#FFFFFF"/>
-
-        <View
-            android:layout_width="8dp"
-            android:layout_height="0dp" />
-
-        <Button
-            android:id="@+id/btnUserInfo"
+            android:gravity="center"
+            android:orientation="vertical"
             android:layout_width="0dp"
-            android:layout_height="wrap_content"
+            android:layout_height="wrap_content">
+
+            <ImageButton
+                android:id="@+id/btnMainFeed"
+                android:layout_width="32dp"
+                android:layout_height="32dp"
+                android:clickable="true"
+                android:focusable="true"
+                android:background="?attr/selectableItemBackgroundBorderless"
+                android:src="@drawable/home_icon_32px"/>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="메인화면"
+                android:textStyle="bold"
+                android:textColor="#000000"
+                android:textSize="12sp"
+                android:layout_marginTop="4dp"
+                />
+        </LinearLayout>
+
+        <LinearLayout
             android:layout_weight="1"
-            android:text="유저 정보"
-            android:backgroundTint="#424242"
-            android:textColor="#FFFFFF"/>
+            android:gravity="center"
+            android:orientation="vertical"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content">
+
+            <ImageButton
+                android:id="@+id/btnUserInfo"
+                android:layout_width="32dp"
+                android:layout_height="32dp"
+                android:clickable="true"
+                android:focusable="true"
+                android:background="?attr/selectableItemBackgroundBorderless"
+                android:src="@drawable/user_icon_32px"/>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="마이 페이지"
+                android:textStyle="bold"
+                android:textColor="#000000"
+                android:textSize="12sp"
+                android:layout_marginTop="4dp"
+                />
+        </LinearLayout>
     </LinearLayout>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

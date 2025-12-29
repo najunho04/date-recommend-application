@@ -4,7 +4,7 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:padding="12dp"
-    android:background="?attr/selectableItemBackground">
+    android:background="@drawable/radius_12">
 
     <!-- 장소 이름 -->
     <TextView

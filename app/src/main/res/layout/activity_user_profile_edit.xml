@@ -7,11 +7,53 @@
     android:layout_height="match_parent"
     tools:context=".Activity.User.UserProfileEditActivity">
 
+    <!-- ================= 상단 바 ================= -->
+    <LinearLayout
+        android:id="@+id/topBar"
+        android:layout_width="0dp"
+        android:layout_height="96dp"
+        android:orientation="horizontal"
+        android:gravity="center_vertical"
+        android:paddingStart="20dp"
+        android:paddingEnd="20dp"
+        android:background="@drawable/bg_top_bar"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent">
+
+        <!-- 앱 로고 -->
+        <ImageView
+            android:layout_width="32dp"
+            android:layout_height="32dp"
+            android:contentDescription="app logo"
+            android:src="@drawable/app_icon_64px" />
+
+        <!-- 타이틀 -->
+        <TextView
+            android:layout_marginStart="12dp"
+            android:text="프로필 수정"
+            android:textSize="18sp"
+            android:textStyle="bold"
+            android:textColor="#000000"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"/>
+
+        <!-- 뒤로가기 -->
+        <ImageButton
+            android:id="@+id/btnBack"
+            android:layout_width="32dp"
+            android:layout_height="32dp"
+            android:background="@drawable/bg_back_button"
+            android:contentDescription="back"
+            android:src="@drawable/arrow_back_32px" />
+    </LinearLayout>
+
     <ScrollView
         android:layout_width="0dp"
         android:layout_height="0dp"
         android:fillViewport="true"
-        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/topBar"
         app:layout_constraintBottom_toTopOf="@+id/btnSaveProfile"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent">
@@ -21,26 +63,15 @@
             android:layout_height="wrap_content"
             android:padding="20dp">
 
-            <!-- 상단 타이틀 -->
-            <TextView
-                android:id="@+id/tvProfileTitle"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="프로필 수정"
-                android:textAppearance="@style/TextAppearance.AppCompat.Large"
-                android:textStyle="bold"
-                app:layout_constraintTop_toTopOf="parent"
-                app:layout_constraintStart_toStartOf="parent" />
-
             <!-- 닉네임 -->
             <TextView
                 android:id="@+id/tvLabelNickName"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:text="닉네임"
+                android:textColor="@color/black"
                 android:textStyle="bold"
-                android:layout_marginTop="24dp"
-                app:layout_constraintTop_toBottomOf="@id/tvProfileTitle"
+                app:layout_constraintTop_toTopOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintEnd_toStartOf="@id/btnEditNick" />
 
@@ -68,12 +99,15 @@
                     android:inputType="textPersonName" />
             </FrameLayout>
 
-            <Button
+            <TextView
                 android:id="@+id/btnEditNick"
-                android:layout_width="60dp"
-                android:layout_height="40dp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:paddingHorizontal="12dp"
+                android:paddingVertical="4dp"
                 android:layout_marginTop="4dp"
-                android:backgroundTint="@color/white"
+                android:background="@drawable/bg_login_button"
+                android:backgroundTint="#F7C6B8"
                 android:text="수정"
                 android:textColor="@color/black"
                 app:layout_constraintEnd_toEndOf="parent"
@@ -85,6 +119,7 @@
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:text="나이"
+                android:textColor="@color/black"
                 android:textStyle="bold"
                 android:layout_marginTop="24dp"
                 app:layout_constraintTop_toBottomOf="@id/frameNickName"
@@ -115,11 +150,13 @@
                     android:inputType="number" />
             </FrameLayout>
 
-            <Button
+            <TextView
                 android:id="@+id/btnEditAge"
-                android:layout_width="60dp"
-                android:layout_height="40dp"
-                android:backgroundTint="@color/white"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:paddingHorizontal="12dp"
+                android:paddingVertical="4dp"
+                android:background="@drawable/bg_login_button"
                 android:textColor="@color/black"
                 android:text="수정"
                 app:layout_constraintTop_toTopOf="@id/frameAge"
@@ -131,6 +168,7 @@
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:text="지역"
+                android:textColor="@color/black"
                 android:textStyle="bold"
                 android:layout_marginTop="24dp"
                 app:layout_constraintTop_toBottomOf="@id/frameAge"
@@ -147,11 +185,13 @@
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintEnd_toStartOf="@id/btnEditLocation" />
 
-            <Button
+            <TextView
                 android:id="@+id/btnEditLocation"
-                android:layout_width="60dp"
-                android:layout_height="40dp"
-                android:backgroundTint="@color/white"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:paddingHorizontal="12dp"
+                android:paddingVertical="4dp"
+                android:background="@drawable/bg_login_button"
                 android:text="수정"
                 android:textColor="@color/black"
                 app:layout_constraintEnd_toEndOf="parent"
@@ -163,6 +203,7 @@
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:text="성별"
+                android:textColor="@color/black"
                 android:textStyle="bold"
                 android:layout_marginTop="24dp"
                 app:layout_constraintTop_toBottomOf="@id/tvLocation"
@@ -179,11 +220,13 @@
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintEnd_toStartOf="@id/btnEditGender" />
 
-            <Button
+            <TextView
                 android:id="@+id/btnEditGender"
-                android:layout_width="60dp"
-                android:layout_height="40dp"
-                android:backgroundTint="@color/white"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:paddingHorizontal="12dp"
+                android:paddingVertical="4dp"
+                android:background="@drawable/bg_login_button"
                 android:textColor="@color/black"
                 android:text="수정"
                 app:layout_constraintTop_toTopOf="@id/tvGender"
@@ -195,6 +238,7 @@
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:text="흥미"
+                android:textColor="@color/black"
                 android:textStyle="bold"
                 android:layout_marginTop="24dp"
                 app:layout_constraintTop_toBottomOf="@id/tvGender"
@@ -205,8 +249,10 @@
                 android:layout_width="0dp"
                 android:layout_height="40dp"
                 android:text="AI, Coding, Finance"
-                android:backgroundTint="@color/white"
                 android:textColor="@color/black"
+                android:layout_marginTop="12dp"
+                app:backgroundTint="@null"
+                android:background="@drawable/bg_login_button"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/tvLabelInterests" />
@@ -230,10 +276,12 @@
     <Button
         android:id="@+id/btnSaveProfile"
         android:layout_width="0dp"
-        android:layout_height="wrap_content"
+        android:layout_height="40dp"
         android:text="저장하기"
-        android:textStyle="bold"
+        android:textColor="@color/black"
         android:layout_margin="16dp"
+        app:backgroundTint="@null"
+        android:background="@drawable/bg_login_button"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent" />

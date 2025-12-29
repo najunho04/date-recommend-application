@@ -9,34 +9,37 @@
     android:background="#FFFFFF"
     tools:context=".Activity.MainActivity">
 
-    <!-- 🔹 상단 앱 로고 + 제목 -->
+    <!-- ================= 상단 바 ================= -->
     <LinearLayout
-        android:id="@+id/headerLayout"
+        android:id="@+id/topBar"
         android:layout_width="0dp"
-        android:layout_height="wrap_content"
+        android:layout_height="80dp"
         android:orientation="horizontal"
         android:gravity="center_vertical"
-        android:padding="16dp"
+        android:paddingStart="20dp"
+        android:paddingEnd="20dp"
+        android:background="@drawable/bg_top_bar"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent">
 
+        <!-- 앱 로고 -->
         <ImageView
-            android:id="@+id/imgLogo"
-            android:layout_width="48dp"
-            android:layout_height="48dp"
-            android:src="@mipmap/ic_launcher_for_app_logo_round"
-            android:contentDescription="App Logo"
-            android:layout_marginEnd="8dp" />
+            android:layout_width="32dp"
+            android:layout_height="32dp"
+            android:contentDescription="app logo"
+            android:src="@drawable/app_icon_64px" />
 
+        <!-- 타이틀 -->
         <TextView
-            android:id="@+id/tvAppTitle"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="DateRecommendationApp"
-            android:textSize="20sp"
+            android:layout_marginStart="12dp"
+            android:text="좋아하는 게시물"
+            android:textSize="18sp"
             android:textStyle="bold"
-            android:textColor="#333333" />
+            android:textColor="#000000"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"/>
     </LinearLayout>
 
     <androidx.recyclerview.widget.RecyclerView
@@ -51,7 +54,7 @@
         app:layout_constraintBottom_toTopOf="@+id/navigationLayout"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/headerLayout" />
+        app:layout_constraintTop_toBottomOf="@+id/topBar" />
 
     <LinearLayout
         android:id="@+id/navigationLayout"
@@ -70,8 +73,9 @@
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:text="뒤로 가기"
-            android:backgroundTint="#1976D2"
-            android:textColor="#FFFFFF"/>
+            app:backgroundTint="@null"
+            android:background="@drawable/bg_login_button"
+            android:textColor="#000000"/>
     </LinearLayout>
 
 </androidx.constraintlayout.widget.ConstraintLayout>
