@@ -2,6 +2,7 @@ package com.najunho.datecourserecommendapplication.Util;
 
 import android.app.Application;
 
+import com.najunho.datecourserecommendapplication.BuildConfig;
 import com.najunho.datecourserecommendapplication.DB.CommentRepo;
 import com.najunho.datecourserecommendapplication.DB.ContentRepo;
 import com.najunho.datecourserecommendapplication.DB.PostRepo;
@@ -28,7 +29,7 @@ public class ApplicationUtil extends Application {
         contentRepo = new ContentRepo(db);
 
         //kakaoMap 초기화
-        com.kakao.vectormap.KakaoMapSdk.init(this, "REDACTED_KAKAO_NATIVE_APP_KEY");
+        com.kakao.vectormap.KakaoMapSdk.init(this, BuildConfig.KAKAO_NATIVE_APP_KEY);
     }
 
     public static FirebaseFirestore getFirestore(){
